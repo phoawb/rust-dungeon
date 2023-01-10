@@ -1,6 +1,6 @@
 use sfml::{
     graphics::{RenderWindow, Texture},
-    system::Vector2f,
+    system::{Vector2f, Vector2i},
     SfBox,
 };
 
@@ -10,30 +10,30 @@ pub struct Room {
     tiles: Vec<Vec<Tile>>,
 }
 
-fn get_image_count(i: i32, j: i32) -> Vector2f {
-    let image_count: Vector2f;
+fn get_image_count(i: i32, j: i32) -> Vector2i {
+    let image_count: Vector2i;
     if i == 0 {
         if j == 0 {
-            image_count = Vector2f { x: 0.0, y: 0.0 };
+            image_count = Vector2i { x: 0, y: 0 };
         } else if j == 14 {
-            image_count = Vector2f { x: 0.0, y: 2.0 };
+            image_count = Vector2i { x: 0, y: 2 };
         } else {
-            image_count = Vector2f { x: 0.0, y: 1.0 };
+            image_count = Vector2i { x: 0, y: 1 };
         }
     } else if i == 23 {
         if j == 0 {
-            image_count = Vector2f { x: 2.0, y: 0.0 };
+            image_count = Vector2i { x: 2, y: 0 };
         } else if j == 14 {
-            image_count = Vector2f { x: 2.0, y: 2.0 };
+            image_count = Vector2i { x: 2, y: 2 };
         } else {
-            image_count = Vector2f { x: 2.0, y: 1.0 };
+            image_count = Vector2i { x: 2, y: 1 };
         }
     } else if j == 0 {
-        image_count = Vector2f { x: 1.0, y: 0.0 };
+        image_count = Vector2i { x: 1, y: 0 };
     } else if j == 14 {
-        image_count = Vector2f { x: 1.0, y: 2.0 };
+        image_count = Vector2i { x: 1, y: 2 };
     } else {
-        image_count = Vector2f { x: 1.0, y: 1.0 };
+        image_count = Vector2i { x: 1, y: 1 };
     }
     image_count
 }

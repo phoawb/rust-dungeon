@@ -1,4 +1,8 @@
-use sfml::{graphics::*, system::Vector2f, SfBox};
+use sfml::{
+    graphics::*,
+    system::{Vector2f, Vector2i},
+    SfBox,
+};
 
 #[derive(Debug)]
 pub struct Tile {
@@ -24,10 +28,10 @@ impl Tile {
     }
 
     // Constructor
-    pub fn from(position: Vector2f, image_count: Vector2f) -> Tile {
+    pub fn from(position: Vector2f, image_count: Vector2i) -> Tile {
         let mut tile = Tile::new();
-        tile.uv_rect.left = image_count.x as i32 * tile.uv_rect.width;
-        tile.uv_rect.top = image_count.y as i32 * tile.uv_rect.height;
+        tile.uv_rect.left = image_count.x * tile.uv_rect.width;
+        tile.uv_rect.top = image_count.y * tile.uv_rect.height;
         tile.position = position;
         tile
     }
