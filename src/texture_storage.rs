@@ -27,7 +27,5 @@ impl TextureStorage {
 
 #[derive(PartialEq, Eq, Hash)]
 pub enum TextureIdentifiers {
-    Nebula,
-    Rocket,
     Tile,
 }
