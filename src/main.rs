@@ -8,6 +8,10 @@ use room::Room;
 use sfml::graphics::*;
 use sfml::system::*;
 use sfml::window::*;
+mod animation;
+use crate::animation::Animation;
+mod player;
+use crate::player::Player;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
@@ -51,9 +55,12 @@ fn main() {
 
     let mut texture_storage = TextureStorage::new();
     texture_storage.load(TextureIdentifiers::Tile, "textures/tile_sheet1.png");
+    texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
 
     let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
-
+    let animation: Animation =
+        Animation::from(TextureIdentifiers::Player, Vector2i { x: 4, y: 10 }, 0.2);
+    let player = Player::from(Vector2f { x: 384.0, y: 240.0 }, Vector2i { x: 4, y: 10 });
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -84,6 +91,7 @@ fn main() {
         window.clear(Color::BLACK);
         window.set_view(&main_view);
         room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
+        player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
         window.display();
     }
 }
