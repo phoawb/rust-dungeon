@@ -58,9 +58,7 @@ fn main() {
     texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
 
     let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
-    let animation: Animation =
-        Animation::from(TextureIdentifiers::Player, Vector2i { x: 4, y: 10 }, 0.2);
-    let player = Player::from(Vector2f { x: 384.0, y: 240.0 }, Vector2i { x: 4, y: 10 });
+    let mut player = Player::from(Vector2f { x: 384.0, y: 240.0 }, Vector2i { x: 4, y: 10 });
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -90,6 +88,7 @@ fn main() {
         // drawing
         window.clear(Color::BLACK);
         window.set_view(&main_view);
+        player.update();
         room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
         window.display();
