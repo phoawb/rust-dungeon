@@ -32,7 +32,7 @@ impl Tile {
         tile
     }
 
-    pub fn create_body(&mut self) -> RectangleShape {
+    pub fn create_body(&self) -> RectangleShape {
         let mut body = RectangleShape::new();
         body.set_size(self.size);
         body.set_position(self.position);
@@ -41,7 +41,7 @@ impl Tile {
         body
     }
 
-    pub fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
+    pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body();
         body.set_texture(texture, false);
         window.draw(&body);
