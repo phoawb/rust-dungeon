@@ -63,7 +63,8 @@ impl Animation {
         self.uv_rect.top = self.current_image.y * self.uv_rect.height;
 
         if face_right {
-            self.uv_rect.left = self.current_image.x * self.uv_rect.width
+            self.uv_rect.left = self.current_image.x * self.uv_rect.width;
+            self.uv_rect.width = self.uv_rect.width.abs();
         } else {
             self.uv_rect.left = (self.current_image.x + 1) * self.uv_rect.width.abs();
             self.uv_rect.width = -self.uv_rect.width.abs();
