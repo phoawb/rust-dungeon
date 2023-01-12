@@ -6,6 +6,7 @@ use sfml::{
 
 use crate::tile::Tile;
 
+#[derive(Debug)]
 pub struct Room {
     tiles: Vec<Vec<Tile>>,
 }
