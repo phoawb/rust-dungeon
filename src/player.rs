@@ -1,4 +1,5 @@
-use crate::{texture_storage::TextureIdentifiers, Animation};
+use crate::animation::Animation;
+use crate::texture_storage::TextureIdentifiers;
 use sfml::{
     graphics::*,
     system::{Vector2f, Vector2i},
@@ -139,8 +140,6 @@ impl Player {
         } else {
             self.set_animation(movement);
         }
-        println!("right direction before: {:?}", self.direction[1]);
-        println!("row is: {:?}", self.row);
         self.animation.update(self.row, self.direction[1]);
 
         self.position += movement;
