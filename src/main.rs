@@ -9,9 +9,10 @@ use sfml::graphics::*;
 use sfml::system::*;
 use sfml::window::*;
 mod animation;
-use crate::animation::Animation;
 mod player;
-use crate::player::Player;
+use player::Player;
+mod map;
+use map::Map;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
@@ -44,21 +45,24 @@ fn main() {
         y: VIEW_SIZE.y / 2.0,
     };
 
-    let mut main_view = View::new(center, VIEW_SIZE);
-
-    let mut rectangle = RectangleShape::new();
-    rectangle.set_size(Vector2f::new(100.0, 100.0));
-    rectangle.set_fill_color(Color::rgb(255, 0, 100));
-    rectangle.set_origin(rectangle.size() / 2.0);
-    rectangle.set_position(Vector2f::new(main_view.center().x, main_view.center().y));
-    println!("{:?}", rectangle.position());
+    let mut main_view = View::new(center, VIEW_SIZE * 16.0);
+    println!("{:?}", main_view.center());
+    main_view.set_center(VIEW_SIZE * 9.0 / 2.0);
 
     let mut texture_storage = TextureStorage::new();
     texture_storage.load(TextureIdentifiers::Tile, "textures/tile_sheet1.png");
     texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
 
-    let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
-    let mut player = Player::from(Vector2f { x: 384.0, y: 240.0 }, Vector2i { x: 4, y: 10 });
+    //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
+    let mut map = Map::from(Vector2 { x: 9, y: 9 });
+    map.start();
+    let mut player = Player::from(
+        Vector2f {
+            x: center.x * 9.0,
+            y: center.y * 9.0,
+        },
+        Vector2i { x: 4, y: 10 },
+    );
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -89,7 +93,8 @@ fn main() {
         window.clear(Color::BLACK);
         window.set_view(&main_view);
         player.update();
-        room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
+        //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
+        map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
         window.display();
     }
