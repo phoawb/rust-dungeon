@@ -19,6 +19,7 @@ impl Map {
     pub fn from(grid_size: Vector2<usize>) -> Map {
         let number_of_rooms = 30;
         if grid_size.x * grid_size.y < number_of_rooms {
+            // TODO: ABSTRACT AWAY THIS PANIC CALL LMAO
             panic!("The grid must contain at least 30 rooms!");
         }
         Map {
@@ -49,19 +50,21 @@ impl Map {
         // 2. Create a stack to hold the current position and all the positions of previously visited
         // rooms, and push the starting position onto the stack.
         let mut grid_stack: Vec<Vector2<usize>> = vec![middle_room_coordinates];
-
+        self.taken_positions.push(middle_room_coordinates);
         while self.taken_positions.len() < self.number_of_rooms {
             // 3. pop the top position from the stack and use it as the
             // current position. Mark the current position as visited.
             //TODO: PROPERLY HANDLE UNWRAP CALL LMAO!
             let current_room_coordiantes = grid_stack.pop().unwrap();
-            self.taken_positions.push(current_room_coordiantes);
             /* 4. For each of the four cardinal directions (up, down, left, right) check if the neighboring
             cell is within the grid boundary and is not visited, if it is then:
                 a. Create a new room in that direction
                 b. push the new position to the stack */
             for direction in CardinalDirections::iter() {
                 let new_coordinates = direction.get_direction_coordinates(current_room_coordiantes);
+                if new_coordinates.x == 5 && new_coordinates.y == 4 {
+                    println!("{:?}", self.taken_positions.contains(&new_coordinates));
+                }
                 if !(!self.taken_positions.contains(&new_coordinates)
                     && new_coordinates.x < self.grid_size.x
                     && new_coordinates.y < self.grid_size.y)
