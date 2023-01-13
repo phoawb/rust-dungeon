@@ -85,10 +85,8 @@ impl Map {
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
-        let mut count: i32 = 0;
         for coordinates in &self.taken_positions {
             self.rooms[coordinates.x][coordinates.y].draw(window, texture);
-            count += 1;
         }
         //println!("count is actually: {}!", count);
     }
