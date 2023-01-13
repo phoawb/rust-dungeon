@@ -1,4 +1,6 @@
 use crate::room::Room;
+use rand::{random, thread_rng, Rng};
+use rand::{rngs::StdRng, SeedableRng};
 use rust_dungeon::CardinalDirections;
 use sfml::{
     graphics::{RenderWindow, Texture},
@@ -42,27 +44,49 @@ impl Map {
                 }));
             }
         }
+
+        //TODO: PROPERLY HANDLE USER HAVING CHOSEN SEED OR NOT
+        let tmp_seed: u64 = random();
+        println!("The seed is: {}", tmp_seed);
+        let mut rng = StdRng::seed_from_u64(tmp_seed);
+
+        //TODO: MAKE THE START RANDOM INSTEAD
         let middle_room_coordinates: Vector2<usize> = Vector2 {
             x: self.grid_size.x / 2,
             y: self.grid_size.y / 2,
         };
+
+        let random_x_coord: usize = rng.gen_range(0..self.grid_size.x);
+        let random_y_coord: usize = rng.gen_range(0..self.grid_size.y);
+        let random_starting_coordinates = Vector2 {
+            x: random_x_coord,
+            y: random_y_coord,
+        };
+        println!("The random start is: {:?}", random_starting_coordinates);
         // 1. Start by initializing the first room at a random (read: middle) position on the grid.
         // 2. Create a stack to hold the current position and all the positions of previously visited
         // rooms, and push the starting position onto the stack.
-        let mut grid_stack: Vec<Vector2<usize>> = vec![middle_room_coordinates];
-        self.taken_positions.push(middle_room_coordinates);
+        let mut grid_stack: Vec<Vector2<usize>> = vec![random_starting_coordinates];
+        self.taken_positions.push(random_starting_coordinates);
         while self.taken_positions.len() < self.number_of_rooms {
-            // 3. pop the top position from the stack and use it as the
+            // 3. pop a random position from the stack and use it as the
             // current position. Mark the current position as visited.
+            let random_stack_index = rng.gen_range(0..grid_stack.len());
             //TODO: PROPERLY HANDLE UNWRAP CALL LMAO!
-            let current_room_coordiantes = grid_stack.pop().unwrap();
+            let current_room_coordiantes = grid_stack.remove(random_stack_index);
             /* 4. For each of the four cardinal directions (up, down, left, right) check if the neighboring
             cell is within the grid boundary and is not visited, if it is then:
                 a. Create a new room in that direction
                 b. push the new position to the stack */
             for direction in CardinalDirections::iter() {
+                // Safety to prevent subtraction with zero cases
+                if current_room_coordiantes.x == 0 && matches!(direction, CardinalDirections::Left)
+                    || current_room_coordiantes.y == 0
+                        && matches!(direction, CardinalDirections::Up)
+                {
+                    continue;
+                }
                 let new_coordinates = direction.get_direction_coordinates(current_room_coordiantes);
-                if new_coordinates.x == 5 && new_coordinates.y == 4 {}
                 if !(!self.taken_positions.contains(&new_coordinates)
                     && new_coordinates.x < self.grid_size.x
                     && new_coordinates.y < self.grid_size.y)
@@ -78,6 +102,12 @@ impl Map {
     fn set_room_doors(&mut self) {
         for coordinate in &self.taken_positions {
             for direction in CardinalDirections::iter() {
+                // Safety to prevent subtraction with zero cases
+                if coordinate.x == 0 && matches!(direction, CardinalDirections::Left)
+                    || coordinate.y == 0 && matches!(direction, CardinalDirections::Up)
+                {
+                    continue;
+                }
                 if self
                     .taken_positions
                     .contains(&direction.get_direction_coordinates(*coordinate))
