@@ -1,10 +1,10 @@
+use rust_dungeon::CardinalDirections;
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::Vector2,
     SfBox,
 };
 use strum::IntoEnumIterator;
-use strum_macros::EnumIter;
 
 use crate::room::Room;
 
@@ -94,39 +94,3 @@ impl Map {
         //println!("count is actually: {}!", count);
     }
 }
-
-// TODO: PUT THIS IN LIB.RS
-#[derive(Debug, EnumIter)]
-enum CardinalDirections {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
-impl CardinalDirections {
-    fn get_direction_coordinates(&self, coordinates: Vector2<usize>) -> Vector2<usize> {
-        match self {
-            CardinalDirections::Up => Vector2 {
-                x: coordinates.x,
-                y: coordinates.y - 1,
-            },
-            CardinalDirections::Down => Vector2 {
-                x: coordinates.x,
-                y: coordinates.y + 1,
-            },
-            CardinalDirections::Right => Vector2 {
-                x: coordinates.x + 1,
-                y: coordinates.y,
-            },
-            CardinalDirections::Left => Vector2 {
-                x: coordinates.x - 1,
-                y: coordinates.y,
-            },
-        }
-    }
-}
-
-//Currently the DFS algorithm can somehow take in duplicate values for the visited value,
-// making it so that you can visit the same room mulitple times
-//TODO: INVESTIGATE WHY THAT IS!
