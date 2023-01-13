@@ -1,3 +1,4 @@
+use crate::room::Room;
 use rust_dungeon::CardinalDirections;
 use sfml::{
     graphics::{RenderWindow, Texture},
@@ -6,8 +7,7 @@ use sfml::{
 };
 use strum::IntoEnumIterator;
 
-use crate::room::Room;
-
+#[derive(Debug)]
 pub struct Map {
     grid_size: Vector2<usize>,
     rooms: Vec<Vec<Room>>,
@@ -62,9 +62,7 @@ impl Map {
                 b. push the new position to the stack */
             for direction in CardinalDirections::iter() {
                 let new_coordinates = direction.get_direction_coordinates(current_room_coordiantes);
-                if new_coordinates.x == 5 && new_coordinates.y == 4 {
-                    println!("{:?}", self.taken_positions.contains(&new_coordinates));
-                }
+                if new_coordinates.x == 5 && new_coordinates.y == 4 {}
                 if !(!self.taken_positions.contains(&new_coordinates)
                     && new_coordinates.x < self.grid_size.x
                     && new_coordinates.y < self.grid_size.y)
@@ -75,16 +73,24 @@ impl Map {
                 self.taken_positions.push(new_coordinates);
             }
         }
-        println!("After everything we get the taken positions:");
-        println!("{:?}", self.taken_positions);
-        println!("The length is: {:?}", self.taken_positions.len());
     }
 
-    //fn set_room_doors(&mut self) {}
+    fn set_room_doors(&mut self) {
+        for coordinate in &self.taken_positions {
+            for direction in CardinalDirections::iter() {
+                if self
+                    .taken_positions
+                    .contains(&direction.get_direction_coordinates(*coordinate))
+                {
+                    self.rooms[coordinate.x][coordinate.y].set_door(direction);
+                }
+            }
+        }
+    }
 
     pub fn start(&mut self) {
         self.create_rooms();
-        //self.set_room_doors();
+        self.set_room_doors();
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
