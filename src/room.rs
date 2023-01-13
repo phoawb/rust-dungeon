@@ -1,10 +1,10 @@
+use crate::tile::Tile;
+use rust_dungeon::CardinalDirections;
 use sfml::{
-    graphics::{RenderWindow, Texture},
+    graphics::{IntRect, RenderWindow, Texture},
     system::{Vector2f, Vector2i},
     SfBox,
 };
-
-use crate::tile::Tile;
 
 #[derive(Debug)]
 pub struct Room {
@@ -42,7 +42,7 @@ fn get_image_count(i: i32, j: i32) -> Vector2i {
 impl Room {
     pub fn new() -> Room {
         let mut room = Room { tiles: Vec::new() };
-        for _i in 0..15 {
+        for _i in 0..24 {
             room.tiles.push(Vec::new());
         }
         room
@@ -63,7 +63,8 @@ impl Room {
                     },
                     image_count,
                 );
-                room.tiles[0].push(tile);
+                println!("{}", j);
+                room.tiles[i as usize].push(tile);
             }
         }
         room
@@ -73,6 +74,26 @@ impl Room {
         for row in &self.tiles {
             for tile in row {
                 tile.draw(window, texture);
+            }
+        }
+    }
+    pub fn set_door(&mut self, direction: CardinalDirections) {
+        match direction {
+            CardinalDirections::Up => {
+                self.tiles[11][0].set_texture_coordinates(Vector2i { x: 0, y: 3 });
+                self.tiles[12][0].set_texture_coordinates(Vector2i { x: 0, y: 3 });
+            }
+            CardinalDirections::Down => {
+                self.tiles[11][14].set_texture_coordinates(Vector2i { x: 2, y: 3 });
+                self.tiles[12][14].set_texture_coordinates(Vector2i { x: 2, y: 3 });
+            }
+            CardinalDirections::Right => {
+                self.tiles[23][6].set_texture_coordinates(Vector2i { x: 1, y: 3 });
+                self.tiles[23][7].set_texture_coordinates(Vector2i { x: 1, y: 3 });
+            }
+            CardinalDirections::Left => {
+                self.tiles[0][6].set_texture_coordinates(Vector2i { x: 3, y: 3 });
+                self.tiles[0][7].set_texture_coordinates(Vector2i { x: 3, y: 3 });
             }
         }
     }
