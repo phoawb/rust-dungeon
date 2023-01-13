@@ -1,7 +1,7 @@
 use crate::tile::Tile;
 use rust_dungeon::CardinalDirections;
 use sfml::{
-    graphics::{IntRect, RenderWindow, Texture},
+    graphics::{RenderWindow, Texture},
     system::{Vector2f, Vector2i},
     SfBox,
 };
@@ -63,7 +63,6 @@ impl Room {
                     },
                     image_count,
                 );
-                println!("{}", j);
                 room.tiles[i as usize].push(tile);
             }
         }
