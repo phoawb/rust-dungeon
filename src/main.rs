@@ -24,8 +24,8 @@ fn resize_view(window: &RenderWindow, view: &mut View) {
     let aspect_ratio: f32 = window.size().x as f32 / window.size().y as f32;
     println!("Aspect ratio is: {}", aspect_ratio);
     let new_size = Vector2f {
-        x: aspect_ratio * VIEW_SIZE.y,
-        y: VIEW_SIZE.y,
+        x: aspect_ratio * VIEW_SIZE.y * 9.0,
+        y: VIEW_SIZE.y * 9.0,
     };
     view.set_size(new_size);
 }
@@ -44,7 +44,7 @@ fn main() {
         y: VIEW_SIZE.y / 2.0,
     };
 
-    let mut main_view = View::new(center, VIEW_SIZE * 16.0);
+    let mut main_view = View::new(center, VIEW_SIZE * 9.0);
     println!("{:?}", main_view.center());
     main_view.set_center(VIEW_SIZE * 9.0 / 2.0);
 
