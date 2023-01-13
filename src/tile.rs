@@ -50,4 +50,9 @@ impl Tile {
         body.set_texture(texture, false);
         window.draw(&body);
     }
+
+    pub fn set_texture_coordinates(&mut self, image_count: Vector2i) {
+        self.uv_rect.left = image_count.x * self.uv_rect.width;
+        self.uv_rect.top = image_count.y * self.uv_rect.height;
+    }
 }
