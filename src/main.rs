@@ -1,5 +1,3 @@
-extern crate sfml;
-
 mod room;
 mod texture_storage;
 mod tile;
