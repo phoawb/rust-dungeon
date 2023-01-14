@@ -12,31 +12,17 @@ pub struct Room {
 }
 
 fn get_image_count(i: i32, j: i32) -> Vector2i {
-    let image_count: Vector2i;
-    if i == 0 {
-        if j == 0 {
-            image_count = Vector2i { x: 0, y: 0 };
-        } else if j == 14 {
-            image_count = Vector2i { x: 0, y: 2 };
-        } else {
-            image_count = Vector2i { x: 0, y: 1 };
-        }
-    } else if i == 23 {
-        if j == 0 {
-            image_count = Vector2i { x: 2, y: 0 };
-        } else if j == 14 {
-            image_count = Vector2i { x: 2, y: 2 };
-        } else {
-            image_count = Vector2i { x: 2, y: 1 };
-        }
-    } else if j == 0 {
-        image_count = Vector2i { x: 1, y: 0 };
-    } else if j == 14 {
-        image_count = Vector2i { x: 1, y: 2 };
-    } else {
-        image_count = Vector2i { x: 1, y: 1 };
+    match (i, j) {
+        (0, 0) => Vector2i { x: 0, y: 0 },
+        (0, 14) => Vector2i { x: 0, y: 2 },
+        (0, _) => Vector2i { x: 0, y: 1 },
+        (23, 0) => Vector2i { x: 2, y: 0 },
+        (23, 14) => Vector2i { x: 2, y: 2 },
+        (23, _) => Vector2i { x: 2, y: 1 },
+        (_, 0) => Vector2i { x: 1, y: 0 },
+        (_, 14) => Vector2i { x: 1, y: 2 },
+        _ => Vector2i { x: 1, y: 1 },
     }
-    image_count
 }
 
 impl Room {
