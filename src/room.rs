@@ -103,4 +103,17 @@ impl Room {
             }
         }
     }
+
+    pub fn has_doors(&self) -> bool {
+        self.doors.up || self.doors.down || self.doors.right || self.doors.left
+    }
+
+    pub fn get_door(&self, direction: CardinalDirection) -> bool {
+        match direction {
+            CardinalDirection::Up => self.doors.up,
+            CardinalDirection::Down => self.doors.down,
+            CardinalDirection::Left => self.doors.left,
+            CardinalDirection::Right => self.doors.right,
+        }
+    }
 }
