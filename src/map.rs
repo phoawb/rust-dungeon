@@ -32,7 +32,7 @@ impl Map {
         }
     }
 
-    fn create_rooms(&mut self) {
+    fn create_rooms(&mut self, seed: u64) {
         // fill the entire grid with tmp rooms,
         // but don't ackknowledge them
         for x in 0..self.grid_size.x {
@@ -46,9 +46,8 @@ impl Map {
         }
 
         //TODO: PROPERLY HANDLE USER HAVING CHOSEN SEED OR NOT
-        let tmp_seed: u64 = random();
-        println!("The seed is: {}", tmp_seed);
-        let mut rng = StdRng::seed_from_u64(tmp_seed);
+        println!("The seed is: {}", seed);
+        let mut rng = StdRng::seed_from_u64(seed);
 
         //TODO: MAKE THE START RANDOM INSTEAD
         let middle_room_coordinates: Vector2<usize> = Vector2 {
@@ -99,7 +98,7 @@ impl Map {
         }
     }
 
-    fn set_room_doors(&mut self) {
+    fn set_room_doors(&mut self, seed: u64, probability: f32) {
         for coordinate in &self.taken_positions {
             for direction in CardinalDirections::iter() {
                 // Safety to prevent subtraction with zero cases
@@ -119,8 +118,10 @@ impl Map {
     }
 
     pub fn start(&mut self) {
-        self.create_rooms();
-        self.set_room_doors();
+        let seed: u64 = random();
+        let probability = 0.8;
+        self.create_rooms(seed);
+        self.set_room_doors(seed, probability);
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
