@@ -42,7 +42,7 @@ impl Player {
             origin: size / 2.0,
             row: 0,
             animation: Animation::from(TextureIdentifiers::Player, image_count, 0.2),
-            speed: 5.0,
+            speed: 10.0, //TODO: CHANGE THE SPEED TO 5 IN PRODUCTION
             direction: [false, false, true, false],
         }
     }
