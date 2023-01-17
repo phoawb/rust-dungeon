@@ -70,48 +70,48 @@ impl Player {
     }
 
     fn set_animation(&mut self, movement: Vector2f) {
-        if movement.x > 0.0 {
-            self.direction[1] = true;
-            self.direction[3] = false;
-            if movement.y > 0.0 {
-                self.row = 8;
-                self.direction[0] = false;
-                self.direction[2] = true;
-            } else if movement.y < 0.0 {
-                self.row = 6;
-                self.direction[0] = true;
-                self.direction[2] = false;
-            } else if movement.y == 0.0 {
-                self.row = 7;
-                self.direction[0] = false;
-                self.direction[2] = false;
+        match (movement.x, movement.y) {
+            (x, y) if x > 0.0 => {
+                self.direction = [false, true, false, false];
+                match y {
+                    y if y > 0.0 => {
+                        self.row = 8;
+                        self.direction[2] = true;
+                    }
+                    y if y < 0.0 => {
+                        self.row = 6;
+                        self.direction[0] = true;
+                    }
+                    _ => {
+                        self.row = 7;
+                    }
+                }
             }
-        } else if movement.x < 0.0 {
-            self.direction[1] = false;
-            self.direction[3] = true;
-            if movement.y > 0.0 {
-                self.row = 8;
-                self.direction[0] = false;
-                self.direction[2] = true;
-            } else if movement.y < 0.0 {
-                self.row = 6;
-                self.direction[0] = true;
-                self.direction[2] = false;
-            } else if movement.y == 0.0 {
-                self.row = 7;
-                self.direction[0] = false;
-                self.direction[2] = false;
+            (x, y) if x < 0.0 => {
+                self.direction = [false, false, false, true];
+                match y {
+                    y if y > 0.0 => {
+                        self.row = 8;
+                        self.direction[2] = true;
+                    }
+                    y if y < 0.0 => {
+                        self.row = 6;
+                        self.direction[0] = true;
+                    }
+                    _ => {
+                        self.row = 7;
+                    }
+                }
             }
-        } else if movement.x == 0.0 {
-            if movement.y > 0.0 {
-                // down
+            (_, y) if y > 0.0 => {
                 self.row = 9;
                 self.direction = [false, false, true, false];
-            } else if movement.y < 0.0 {
-                // up
+            }
+            (_, y) if y < 0.0 => {
                 self.row = 5;
                 self.direction = [true, false, false, false];
             }
+            _ => { /* Do Nothing */ }
         }
     }
 
