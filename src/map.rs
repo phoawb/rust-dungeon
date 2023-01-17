@@ -127,6 +127,5 @@ impl Map {
         for coordinates in &self.taken_positions {
             self.rooms[coordinates.x][coordinates.y].draw(window, texture);
         }
-        //println!("count is actually: {}!", count);
     }
 }
