@@ -53,13 +53,13 @@ fn main() {
     //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
     map.start();
-    let mut player = Player::from(
-        Vector2f {
-            x: center.x * 9.0,
-            y: center.y * 9.0,
-        },
-        Vector2i { x: 4, y: 10 },
-    );
+    let spawn = map.get_spawn();
+    let position: Vector2<f32> = Vector2 {
+        x: spawn.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,
+        y: spawn.y as f32 * VIEW_SIZE.y + VIEW_SIZE.y / 2.0,
+    };
+    let image_count = Vector2i { x: 4, y: 10 };
+    let mut player = Player::from(position, image_count);
     loop {
         // events
         while let Some(ev) = window.poll_event() {
