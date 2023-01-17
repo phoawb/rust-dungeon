@@ -1,5 +1,5 @@
 use crate::tile::Tile;
-use rust_dungeon::CardinalDirections;
+use rust_dungeon::CardinalDirection;
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::{Vector2f, Vector2i},
@@ -7,8 +7,17 @@ use sfml::{
 };
 
 #[derive(Debug)]
+struct Doors {
+    up: bool,
+    down: bool,
+    right: bool,
+    left: bool,
+}
+
+#[derive(Debug)]
 pub struct Room {
     tiles: Vec<Vec<Tile>>,
+    doors: Doors,
 }
 
 fn get_image_count(i: i32, j: i32) -> Vector2i {
@@ -27,7 +36,15 @@ fn get_image_count(i: i32, j: i32) -> Vector2i {
 
 impl Room {
     pub fn new() -> Room {
-        let mut room = Room { tiles: Vec::new() };
+        let mut room = Room {
+            tiles: Vec::new(),
+            doors: Doors {
+                up: false,
+                down: false,
+                right: false,
+                left: false,
+            },
+        };
         for _i in 0..24 {
             room.tiles.push(Vec::new());
         }
@@ -62,21 +79,25 @@ impl Room {
             }
         }
     }
-    pub fn set_door(&mut self, direction: CardinalDirections) {
+    pub fn set_door(&mut self, direction: CardinalDirection) {
         match direction {
-            CardinalDirections::Up => {
+            CardinalDirection::Up => {
+                self.doors.up = true;
                 self.tiles[11][0].set_texture_coordinates(Vector2i { x: 0, y: 3 });
                 self.tiles[12][0].set_texture_coordinates(Vector2i { x: 0, y: 3 });
             }
-            CardinalDirections::Down => {
+            CardinalDirection::Down => {
+                self.doors.down = true;
                 self.tiles[11][14].set_texture_coordinates(Vector2i { x: 2, y: 3 });
                 self.tiles[12][14].set_texture_coordinates(Vector2i { x: 2, y: 3 });
             }
-            CardinalDirections::Right => {
+            CardinalDirection::Right => {
+                self.doors.right = true;
                 self.tiles[23][6].set_texture_coordinates(Vector2i { x: 1, y: 3 });
                 self.tiles[23][7].set_texture_coordinates(Vector2i { x: 1, y: 3 });
             }
-            CardinalDirections::Left => {
+            CardinalDirection::Left => {
+                self.doors.left = true;
                 self.tiles[0][6].set_texture_coordinates(Vector2i { x: 3, y: 3 });
                 self.tiles[0][7].set_texture_coordinates(Vector2i { x: 3, y: 3 });
             }
