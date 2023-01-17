@@ -52,7 +52,7 @@ fn main() {
 
     //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
-    map.start();
+    map.start(None);
     let spawn = map.get_spawn();
     let position: Vector2<f32> = Vector2 {
         x: spawn.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,

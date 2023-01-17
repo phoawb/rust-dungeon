@@ -145,8 +145,8 @@ impl Map {
         }
     }
 
-    pub fn start(&mut self) {
-        let seed: u64 = random();
+    pub fn start(&mut self, input_seed: Option<u64>) {
+        let seed: u64 = input_seed.unwrap_or(random());
         let probability = 0.55;
         let mut rng = StdRng::seed_from_u64(14348464890032967579);
         let random_x_coord: usize = rng.gen_range(0..self.grid_size.x);
