@@ -1,7 +1,7 @@
 use crate::room::Room;
-use rand::{random, thread_rng, Rng};
+use rand::{random, Rng};
 use rand::{rngs::StdRng, SeedableRng};
-use rust_dungeon::CardinalDirections;
+use rust_dungeon::CardinalDirection;
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::Vector2,
@@ -77,11 +77,10 @@ impl Map {
             cell is within the grid boundary and is not visited, if it is then:
                 a. Create a new room in that direction
                 b. push the new position to the stack */
-            for direction in CardinalDirections::iter() {
+            for direction in CardinalDirection::iter() {
                 // Safety to prevent subtraction with zero cases
-                if current_room_coordiantes.x == 0 && matches!(direction, CardinalDirections::Left)
-                    || current_room_coordiantes.y == 0
-                        && matches!(direction, CardinalDirections::Up)
+                if current_room_coordiantes.x == 0 && matches!(direction, CardinalDirection::Left)
+                    || current_room_coordiantes.y == 0 && matches!(direction, CardinalDirection::Up)
                 {
                     continue;
                 }
@@ -98,20 +97,26 @@ impl Map {
         }
     }
 
+    // This algorithm can set the same door multiple times,
+    // but it isn't worth optimizing currently
     fn set_room_doors(&mut self, seed: u64, probability: f32) {
+        let mut rng = StdRng::seed_from_u64(seed);
         for coordinate in &self.taken_positions {
-            for direction in CardinalDirections::iter() {
+            for direction in CardinalDirection::iter() {
                 // Safety to prevent subtraction with zero cases
-                if coordinate.x == 0 && matches!(direction, CardinalDirections::Left)
-                    || coordinate.y == 0 && matches!(direction, CardinalDirections::Up)
+                if coordinate.x == 0 && matches!(direction, CardinalDirection::Left)
+                    || coordinate.y == 0 && matches!(direction, CardinalDirection::Up)
                 {
                     continue;
                 }
-                if self
-                    .taken_positions
-                    .contains(&direction.get_direction_coordinates(*coordinate))
-                {
+                let neighbouring_coordinates = direction.get_direction_coordinates(*coordinate);
+                if !self.taken_positions.contains(&neighbouring_coordinates) {
+                    continue;
+                }
+                if rng.gen_range(0.0..=1.0) < probability {
                     self.rooms[coordinate.x][coordinate.y].set_door(direction);
+                    self.rooms[neighbouring_coordinates.x][neighbouring_coordinates.y]
+                        .set_door(direction.get_opposite_direction());
                 }
             }
         }
@@ -119,7 +124,7 @@ impl Map {
 
     pub fn start(&mut self) {
         let seed: u64 = random();
-        let probability = 0.8;
+        let probability = 0.5;
         self.create_rooms(seed);
         self.set_room_doors(seed, probability);
     }
