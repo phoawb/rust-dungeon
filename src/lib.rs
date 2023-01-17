@@ -1,7 +1,7 @@
 use sfml::system::Vector2;
 use strum_macros::EnumIter;
 
-#[derive(Debug, EnumIter)]
+#[derive(Debug, EnumIter, Copy, Clone)]
 pub enum CardinalDirections {
     Up,
     Down,
