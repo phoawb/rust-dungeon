@@ -56,12 +56,6 @@ impl Map {
         println!("The seed is: {}", seed);
         let mut rng = StdRng::seed_from_u64(seed);
 
-        //TODO: MAKE THE START RANDOM INSTEAD
-        let middle_room_coordinates: Vector2<usize> = Vector2 {
-            x: self.grid_size.x / 2,
-            y: self.grid_size.y / 2,
-        };
-
         // 1. Start by initializing the first room at a random (read: middle) position on the grid.
         // 2. Create a stack to hold the current position and all the positions of previously visited
         // rooms, and push the starting position onto the stack.
