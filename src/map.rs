@@ -1,14 +1,15 @@
 use crate::room::Room;
-use rand::{random, Rng};
+use rand::Rng;
 use rand::{rngs::StdRng, SeedableRng};
 use rust_dungeon::CardinalDirection;
+use rust_dungeon::RoomColor;
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::Vector2,
     SfBox,
 };
 use std::collections::VecDeque;
-use strum::IntoEnumIterator;
+use strum::{EnumCount, IntoEnumIterator};
 
 #[derive(Debug)]
 pub struct Map {
@@ -65,7 +66,6 @@ impl Map {
             // 3. pop a random position from the stack and use it as the
             // current position. Mark the current position as visited.
             let random_stack_index = rng.gen_range(0..grid_stack.len());
-            //TODO: PROPERLY HANDLE UNWRAP CALL LMAO!
             let current_room_coordiantes = grid_stack.remove(random_stack_index);
             /* 4. For each of the four cardinal directions (up, down, left, right) check if the neighboring
             cell is within the grid boundary and is not visited, if it is then:
@@ -88,6 +88,16 @@ impl Map {
                 grid_stack.push(new_coordinates);
                 self.taken_positions.push(new_coordinates);
             }
+        }
+    }
+
+    fn set_room_colors(&mut self, seed: u64) {
+        let mut rng = StdRng::seed_from_u64(seed);
+        for coordinate in &self.taken_positions {
+            //exclude brown (default) & red (only for start and end)
+            let random_index = rng.gen_range(2..RoomColor::COUNT);
+            let random_color = RoomColor::from_repr(random_index).unwrap_or(RoomColor::Brown);
+            self.rooms[coordinate.x][coordinate.y].set_color(random_color);
         }
     }
 
@@ -140,9 +150,10 @@ impl Map {
     }
 
     pub fn start(&mut self, input_seed: Option<u64>) {
-        let seed: u64 = input_seed.unwrap_or(random());
+        //let seed: u64 = input_seed.unwrap_or(random());
+        let seed: u64 = 14348464890032967579;
         let probability = 0.55;
-        let mut rng = StdRng::seed_from_u64(14348464890032967579);
+        let mut rng = StdRng::seed_from_u64(seed);
         let random_x_coord: usize = rng.gen_range(0..self.grid_size.x);
         let random_y_coord: usize = rng.gen_range(0..self.grid_size.y);
         let starting_coordinates = Vector2 {
@@ -150,8 +161,9 @@ impl Map {
             y: random_y_coord,
         };
         println!("The random start is: {:?}", starting_coordinates);
-        self.create_rooms(14348464890032967579, starting_coordinates);
-        self.set_room_doors(14348464890032967579, probability);
+        self.create_rooms(seed, starting_coordinates);
+        self.set_room_doors(seed, probability);
+        self.set_room_colors(seed);
         self.spawn = self.get_farthest_coordinate(starting_coordinates);
         self.end = self.get_farthest_coordinate(self.spawn);
         println!("spawn is {:?}", self.spawn);

@@ -1,6 +1,5 @@
 use sfml::system::Vector2;
-use strum_macros::EnumIter;
-
+use strum_macros::{EnumCount, EnumIter, FromRepr};
 #[derive(Debug, EnumIter, Copy, Clone)]
 pub enum CardinalDirection {
     Up,
@@ -38,4 +37,14 @@ impl CardinalDirection {
             CardinalDirection::Left => CardinalDirection::Right,
         }
     }
+}
+
+#[derive(Debug, EnumIter, Copy, Clone, FromRepr, EnumCount)]
+pub enum RoomColor {
+    Brown,
+    Red,
+    Pink,
+    Blue,
+    Green,
+    Purple,
 }

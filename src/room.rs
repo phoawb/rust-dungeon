@@ -1,5 +1,5 @@
 use crate::tile::Tile;
-use rust_dungeon::CardinalDirection;
+use rust_dungeon::{CardinalDirection, RoomColor};
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::{Vector2f, Vector2i},
@@ -18,6 +18,7 @@ struct Doors {
 pub struct Room {
     tiles: Vec<Vec<Tile>>,
     doors: Doors,
+    color: RoomColor,
 }
 
 fn get_image_count(i: i32, j: i32) -> Vector2i {
@@ -44,6 +45,7 @@ impl Room {
                 right: false,
                 left: false,
             },
+            color: RoomColor::Brown,
         };
         for _i in 0..24 {
             room.tiles.push(Vec::new());
@@ -72,10 +74,14 @@ impl Room {
         room
     }
 
+    pub fn set_color(&mut self, color: RoomColor) {
+        self.color = color;
+    }
+
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         for row in &self.tiles {
             for tile in row {
-                tile.draw(window, texture);
+                tile.draw(window, texture, self.color);
             }
         }
     }

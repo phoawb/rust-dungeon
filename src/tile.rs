@@ -1,3 +1,4 @@
+use rust_dungeon::RoomColor;
 use sfml::{
     graphics::*,
     system::{Vector2f, Vector2i},
@@ -45,9 +46,16 @@ impl Tile {
         body
     }
 
-    pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
-        let mut body = self.create_body();
+    pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>, color: RoomColor) {
+        let mut body = get_colored_body(self.create_body(), color);
+        //body.set_fill_color(Color::rgb(150, 0, 255)); // purple
         body.set_texture(texture, false);
+        //body.set_fill_color(Color::rgb(253, 132, 253)); // pink
+        //body.set_fill_color(Color::rgb(98, 234, 255)); // blue
+        //body.set_fill_color(Color::rgb(132, 255, 200)); // green
+
+        //set_tile_color(&mut body, color);
+        //body.set_fill_color(Color::WHITE); // purple
         window.draw(&body);
     }
 
@@ -55,4 +63,19 @@ impl Tile {
         self.uv_rect.left = image_count.x * self.uv_rect.width;
         self.uv_rect.top = image_count.y * self.uv_rect.height;
     }
+}
+
+// Helper functions
+
+fn get_colored_body(mut body: RectangleShape, color: RoomColor) -> RectangleShape {
+    let rgb: sfml::graphics::Color = match color {
+        RoomColor::Brown => Color::WHITE,
+        RoomColor::Pink => Color::rgb(253, 132, 253),
+        RoomColor::Blue => Color::rgb(98, 234, 255),
+        RoomColor::Green => Color::rgb(132, 255, 200),
+        RoomColor::Purple => Color::rgb(150, 0, 255),
+        RoomColor::Red => Color::RED,
+    };
+    body.set_fill_color(rgb);
+    body
 }
