@@ -8,8 +8,9 @@ use sfml::{
     system::Vector2,
     SfBox,
 };
+use std::collections::HashMap;
 use std::collections::VecDeque;
-use strum::{EnumCount, IntoEnumIterator};
+use strum::IntoEnumIterator;
 
 #[derive(Debug)]
 pub struct Map {
@@ -91,14 +92,27 @@ impl Map {
         }
     }
 
-    fn set_room_colors(&mut self, seed: u64) {
-        let mut rng = StdRng::seed_from_u64(seed);
+    fn set_room_colors(&mut self, colors: HashMap<usize, usize>) {
+        for i in 0..self.taken_positions.len() {
+            let coordinates = self.taken_positions[i];
+            let color_index = colors.get(&i).unwrap();
+
+            let color = match color_index {
+                0 => RoomColor::Pink,
+                1 => RoomColor::Blue,
+                2 => RoomColor::Green,
+                3 => RoomColor::Purple,
+                _ => RoomColor::Brown,
+            };
+            self.rooms[coordinates.x][coordinates.y].set_color(color)
+        }
+        /*         let mut rng = StdRng::seed_from_u64(seed);
         for coordinate in &self.taken_positions {
             //exclude brown (default) & red (only for start and end)
             let random_index = rng.gen_range(2..RoomColor::COUNT);
             let random_color = RoomColor::from_repr(random_index).unwrap_or(RoomColor::Brown);
             self.rooms[coordinate.x][coordinate.y].set_color(random_color);
-        }
+        } */
     }
 
     // This algorithm can set the same door multiple times,
@@ -163,9 +177,14 @@ impl Map {
         println!("The random start is: {:?}", starting_coordinates);
         self.create_rooms(seed, starting_coordinates);
         self.set_room_doors(seed, probability);
-        self.set_room_colors(seed);
+        let adjacency_list = self.get_adjacency_list();
+        let num_colors = 4;
+        let colors = self.get_room_colors(&adjacency_list, num_colors);
+        self.set_room_colors(colors);
         self.spawn = self.get_farthest_coordinate(starting_coordinates);
+        self.rooms[self.spawn.x][self.spawn.y].set_color(RoomColor::Red);
         self.end = self.get_farthest_coordinate(self.spawn);
+        self.rooms[self.end.x][self.end.y].set_color(RoomColor::Red);
         println!("spawn is {:?}", self.spawn);
         println!("end is {:?}", self.end);
     }
@@ -207,5 +226,99 @@ impl Map {
         for coordinates in &self.taken_positions {
             self.rooms[coordinates.x][coordinates.y].draw(window, texture);
         }
+    }
+
+    fn get_neighbouring_room_indexes(&self, coordinate: Vector2<usize>) -> Vec<usize> {
+        let mut neighbouring_room_indexes: Vec<usize> = Vec::new();
+        for direction in CardinalDirection::iter() {
+            let neighbouring_room = direction.get_direction_coordinates(coordinate);
+            if self.taken_positions.contains(&neighbouring_room) {
+                let index = self
+                    .taken_positions
+                    .iter()
+                    .position(|&r| r == neighbouring_room)
+                    .unwrap();
+                neighbouring_room_indexes.push(index);
+            }
+        }
+        neighbouring_room_indexes
+    }
+
+    // 1. adjust adjesensy list so that it just uses numbers (index of taken positions)
+    fn get_adjacency_list(&self) -> HashMap<usize, Vec<usize>> {
+        let mut adjacency_list: HashMap<usize, Vec<usize>> = HashMap::new();
+        for coordinate in &self.taken_positions {
+            let neighbouring_room_indexes = self.get_neighbouring_room_indexes(*coordinate);
+            // TODO HANDLE UNWRAP CALL LMAO
+            let index = self
+                .taken_positions
+                .iter()
+                .position(|&r| r == *coordinate)
+                .unwrap();
+            adjacency_list.insert(index, neighbouring_room_indexes);
+        }
+        adjacency_list
+    }
+
+    // TODO: PUT IN LIB
+    // TODO: IMPLEMENT A NON-GREEDY VERSION OF GET ROOM COLORS
+    fn get_room_colors(
+        &self,
+        adjacency_list: &HashMap<usize, Vec<usize>>,
+        num_colors: usize,
+    ) -> HashMap<usize, usize> {
+        // Create a vector to store the degree of each room
+        let mut degrees: Vec<usize> = (0..adjacency_list.len())
+            .map(|i| adjacency_list[&i].len())
+            .collect();
+
+        let mut indices: Vec<usize> = (0..degrees.len()).collect();
+
+        indices.sort_by(|&i1, &i2| degrees[i2].cmp(&degrees[i1]));
+        // Sort the rooms in descending order of their degree
+        degrees.sort_by(|a, b| b.cmp(a));
+        println!("degree is: {:?}", degrees);
+
+        // Create a vector to store the color of each room
+        let mut colors: Vec<usize> = vec![0; adjacency_list.len()];
+
+        // Create a vector to store the available colors for each room
+        let mut available_colors: Vec<Vec<bool>> =
+            vec![vec![true; num_colors]; adjacency_list.len()];
+
+        // Assign the first color to the highest degree room
+        colors[indices[0]] = 0;
+
+        // Mark the first color as unavailable for the adjacent rooms
+        for &adjacent_room in &adjacency_list[&indices[0]] {
+            available_colors[adjacent_room][0] = false;
+        }
+
+        // Iterate through the remaining rooms
+        for i in 1..indices.len() {
+            let room = indices[i];
+
+            // Find the lowest numbered color that is not used by any of its adjacent rooms
+            let mut color = 0;
+            while !available_colors[room][color] {
+                color += 1;
+            }
+
+            // Assign the color to the room
+            colors[room] = color;
+
+            // Mark the assigned color as unavailable for the adjacent rooms
+            for &adjacent_room in &adjacency_list[&room] {
+                available_colors[adjacent_room][color] = false;
+            }
+            println!("colors is currently: {:?}\n", colors);
+        }
+        let color_map = colors
+            .into_iter()
+            .enumerate()
+            .map(|(i, c)| (i, c))
+            .collect();
+        println!("color map is: {:?}", color_map);
+        color_map
     }
 }
