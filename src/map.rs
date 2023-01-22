@@ -179,7 +179,7 @@ impl Map {
         self.set_room_doors(seed, probability);
         let adjacency_list = self.get_adjacency_list();
         let num_colors = 4;
-        let colors = self.get_room_colors(&adjacency_list, num_colors);
+        let colors = self.get_room_colors(&adjacency_list, num_colors, seed);
         self.set_room_colors(colors);
         self.spawn = self.get_farthest_coordinate(starting_coordinates);
         self.rooms[self.spawn.x][self.spawn.y].set_color(RoomColor::Red);
@@ -261,11 +261,11 @@ impl Map {
     }
 
     // TODO: PUT IN LIB
-    // TODO: IMPLEMENT A NON-GREEDY VERSION OF GET ROOM COLORS
     fn get_room_colors(
         &self,
         adjacency_list: &HashMap<usize, Vec<usize>>,
         num_colors: usize,
+        seed: u64,
     ) -> HashMap<usize, usize> {
         // Create a vector to store the degree of each room
         let mut degrees: Vec<usize> = (0..adjacency_list.len())
@@ -277,7 +277,6 @@ impl Map {
         indices.sort_by(|&i1, &i2| degrees[i2].cmp(&degrees[i1]));
         // Sort the rooms in descending order of their degree
         degrees.sort_by(|a, b| b.cmp(a));
-        println!("degree is: {:?}", degrees);
 
         // Create a vector to store the color of each room
         let mut colors: Vec<usize> = vec![0; adjacency_list.len()];
@@ -294,14 +293,19 @@ impl Map {
             available_colors[adjacent_room][0] = false;
         }
 
+        // Set the rng outside the forlop to avoid reassigning it
+        let mut rng = StdRng::seed_from_u64(seed);
+
         // Iterate through the remaining rooms
         for i in 1..indices.len() {
             let room = indices[i];
 
-            // Find the lowest numbered color that is not used by any of its adjacent rooms
-            let mut color = 0;
+            // Find a random color that is not used by any of its adjacent rooms
+            let mut color = rng.gen_range(0..num_colors);
+            println!("firsst color is: {}", color);
             while !available_colors[room][color] {
-                color += 1;
+                color = rng.gen_range(0..num_colors);
+                println!("Random color is: {}", color);
             }
 
             // Assign the color to the room
@@ -311,14 +315,12 @@ impl Map {
             for &adjacent_room in &adjacency_list[&room] {
                 available_colors[adjacent_room][color] = false;
             }
-            println!("colors is currently: {:?}\n", colors);
         }
         let color_map = colors
             .into_iter()
             .enumerate()
             .map(|(i, c)| (i, c))
             .collect();
-        println!("color map is: {:?}", color_map);
         color_map
     }
 }
