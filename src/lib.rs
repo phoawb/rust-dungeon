@@ -94,7 +94,6 @@ pub fn get_room_colors(
         println!("firsst color is: {}", color);
         while !available_colors[room][color] {
             color = rng.gen_range(0..num_colors);
-            println!("Random color is: {}", color);
         }
 
         // Assign the color to the room
