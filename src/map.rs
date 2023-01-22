@@ -201,15 +201,16 @@ impl Map {
             current_room = queue.pop_front().unwrap();
 
             for direction in CardinalDirection::iter() {
-                if self.rooms[current_room.x][current_room.y].get_door(direction) {
-                    let neighbouring_room = direction.get_direction_coordinates(current_room);
-                    if !self.taken_positions.contains(&neighbouring_room) {
-                        continue;
-                    }
-                    if !visited_rooms.contains(&neighbouring_room) {
-                        visited_rooms.push(neighbouring_room);
-                        queue.push_back(neighbouring_room);
-                    }
+                if !self.rooms[current_room.x][current_room.y].get_door(direction) {
+                    continue;
+                }
+                let neighbouring_room = direction.get_direction_coordinates(current_room);
+                if !self.taken_positions.contains(&neighbouring_room) {
+                    continue;
+                }
+                if !visited_rooms.contains(&neighbouring_room) {
+                    visited_rooms.push(neighbouring_room);
+                    queue.push_back(neighbouring_room);
                 }
             }
         }
