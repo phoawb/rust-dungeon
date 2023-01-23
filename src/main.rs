@@ -96,3 +96,36 @@ fn main() {
         window.display();
     }
 }
+
+// TODO NEXT:
+// * Implement the biter enemy
+// * Implement player collision with walls
+// * Implement enemy -||-
+
+/* TODO For collision:
+* Create a vector of enemy bullets & player bullets that live in main
+* The player & enemy update function take that vector as an input argument
+* All enemy bullets live in 1 vector
+*/
+
+/* TODO  ENEMIES:
+* Initialise a vector of enemy vectors with generics
+* each enemy type is defined in its own file
+* Only draw the enemies with the same index as the number of active rooms
+ */
+
+/* TODO MAP & ROOMS
+* Get the number of rooms
+* Store the index of the actve room
+* Have a method to get the active room
+* have a function to set active room based on player location
+ */
+
+/* TODO COLLISIONS
+ * Hadle collisions globally instead of in the rooms
+ * Handle player & Wall collisions with coordinate bounds
+ * Handle Enemy & -||-
+ * Handle player & enemy collisions
+ * Handle player & enemy projectile collisions
+ * Handle enemy & player projectile collissions
+ */
