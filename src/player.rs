@@ -34,8 +34,9 @@ impl Player {
     } */
 
     // Constructor
-    pub fn from(position: Vector2f, image_count: Vector2i) -> Player {
+    pub fn from(position: Vector2f) -> Player {
         let size = Vector2f { x: 70.0, y: 70.0 };
+        let image_count = Vector2i { x: 4, y: 10 };
         Player {
             position,
             size,

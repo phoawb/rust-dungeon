@@ -10,6 +10,7 @@ mod player;
 use player::Player;
 mod map;
 use map::Map;
+mod demonEnemy;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
@@ -58,8 +59,8 @@ fn main() {
         x: spawn.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,
         y: spawn.y as f32 * VIEW_SIZE.y + VIEW_SIZE.y / 2.0,
     };
-    let image_count = Vector2i { x: 4, y: 10 };
-    let mut player = Player::from(position, image_count);
+
+    let mut player = Player::from(position);
     loop {
         // events
         while let Some(ev) = window.poll_event() {
