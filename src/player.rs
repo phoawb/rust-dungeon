@@ -1,5 +1,6 @@
 use crate::animation::Animation;
 use crate::texture_storage::TextureIdentifiers;
+use rust_dungeon::Body;
 use sfml::{
     graphics::*,
     system::{Vector2f, Vector2i},
@@ -146,19 +147,17 @@ impl Player {
         self.position += movement;
     }
 
-    fn create_body(&self) -> RectangleShape {
-        let mut body = RectangleShape::new();
-        body.set_size(self.size);
-        body.set_position(self.position);
-        body.set_origin(self.origin);
-        body.set_texture_rect(&self.animation.get_uv_rect());
-        body
-    }
-
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
-        let mut body = self.create_body();
+        let mut body = self.create_body(
+            self.size,
+            self.position,
+            self.origin,
+            self.animation.get_uv_rect(),
+        );
         body.set_scale(Vector2f { x: 1.1, y: 1.1 });
         body.set_texture(texture, false);
         window.draw(&body);
     }
 }
+
+impl Body for Player {}

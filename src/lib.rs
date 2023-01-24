@@ -1,5 +1,7 @@
-use sfml::system::Vector2;
+use sfml::graphics::*;
+use sfml::system::{Vector2, Vector2f};
 use strum_macros::{EnumCount, EnumIter, FromRepr};
+
 #[derive(Debug, EnumIter, Copy, Clone)]
 pub enum CardinalDirection {
     Up,
@@ -110,4 +112,21 @@ pub fn get_room_colors(
         .map(|(i, c)| (i, c))
         .collect();
     color_map
+}
+
+pub trait Body {
+    fn create_body(
+        &self,
+        size: Vector2f,
+        position: Vector2f,
+        origin: Vector2f,
+        uv_rect: IntRect,
+    ) -> RectangleShape<'static> {
+        let mut body = RectangleShape::new();
+        body.set_size(size);
+        body.set_position(position);
+        body.set_origin(origin);
+        body.set_texture_rect(&uv_rect);
+        body
+    }
 }
