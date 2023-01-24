@@ -10,8 +10,8 @@ mod player;
 use player::Player;
 mod map;
 use map::Map;
-mod demonEnemy;
-use demonEnemy::Demon;
+mod demon_enemy;
+use demon_enemy::Demon;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
