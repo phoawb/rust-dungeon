@@ -11,6 +11,7 @@ use player::Player;
 mod map;
 use map::Map;
 mod demonEnemy;
+use demonEnemy::Demon;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
@@ -50,6 +51,7 @@ fn main() {
     let mut texture_storage = TextureStorage::new();
     texture_storage.load(TextureIdentifiers::Tile, "textures/tile_sheet.png");
     texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
+    texture_storage.load(TextureIdentifiers::Demon, "textures/Demon.png");
 
     //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
@@ -61,6 +63,7 @@ fn main() {
     };
 
     let mut player = Player::from(position);
+    let mut demon: Demon = Demon::from(position);
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -94,6 +97,7 @@ fn main() {
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
+        demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
         window.display();
     }
 }

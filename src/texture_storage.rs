@@ -29,4 +29,5 @@ impl TextureStorage {
 pub enum TextureIdentifiers {
     Tile,
     Player,
+    Demon,
 }
