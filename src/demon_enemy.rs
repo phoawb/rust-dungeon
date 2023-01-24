@@ -26,7 +26,8 @@ impl Demon {
         let image_count: Vector2i = Vector2i { x: 8, y: 1 };
         let switch_time: f32 = 0.2;
         Demon {
-            hp: 60,
+            hp: 40,
+            //damage: 10
             position,
             size,
             origin: size / 2.0,
@@ -63,7 +64,7 @@ impl Demon {
             self.origin,
             self.animation.get_uv_rect(),
         );
-        body.set_scale(Vector2f { x: 2.0, y: 2.0 });
+        body.set_scale(Vector2f { x: 2.5, y: 2.5 });
         body.set_texture(texture, false);
         window.draw(&body);
     }
