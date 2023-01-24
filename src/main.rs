@@ -94,6 +94,7 @@ fn main() {
         window.clear(Color::BLACK);
         window.set_view(&main_view);
         player.update();
+        demon.update(player.get_position());
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));

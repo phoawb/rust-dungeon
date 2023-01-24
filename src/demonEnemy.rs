@@ -16,7 +16,7 @@ pub struct Demon {
     row: i32,
     animation: Animation,
     speed: f32,
-    facing_right: bool,
+    face_right: bool,
     //points: i32,
 }
 
@@ -37,8 +37,23 @@ impl Demon {
                 switch_time,
             ),
             speed: 2.0,
-            facing_right: false,
+            face_right: false,
         }
+    }
+
+    pub fn update(&mut self, player_position: Vector2f) {
+        let x_dif: f32 = player_position.x - self.position.x;
+        let y_dif: f32 = player_position.y - self.position.y;
+        let mut movement = Vector2f { x: x_dif, y: y_dif };
+        self.face_right = if x_dif < 0.0 { false } else { true };
+        self.animation.update(self.row, self.face_right);
+        if movement.x == 0.0 && movement.y == 0.0 {
+            return;
+        }
+        movement.x = movement.x / (x_dif * x_dif + y_dif * y_dif).sqrt();
+        movement.y = movement.y / (x_dif * x_dif + y_dif * y_dif).sqrt();
+        movement *= self.speed;
+        self.position += movement;
     }
 
     pub fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
