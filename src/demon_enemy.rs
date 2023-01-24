@@ -26,7 +26,7 @@ impl Demon {
         let image_count: Vector2i = Vector2i { x: 8, y: 1 };
         let switch_time: f32 = 0.2;
         Demon {
-            hp: 40,
+            hp: 60,
             //damage: 10
             position,
             size,
