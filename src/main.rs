@@ -47,7 +47,7 @@ fn main() {
     main_view.set_center(VIEW_SIZE * 9.0 / 2.0);
 
     let mut texture_storage = TextureStorage::new();
-    texture_storage.load(TextureIdentifiers::Tile, "textures/tile_sheet1.png");
+    texture_storage.load(TextureIdentifiers::Tile, "textures/tile_sheet.png");
     texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
 
     //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
