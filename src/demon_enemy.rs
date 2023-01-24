@@ -64,7 +64,7 @@ impl Demon {
             self.origin,
             self.animation.get_uv_rect(),
         );
-        body.set_scale(Vector2f { x: 2.5, y: 2.5 });
+        body.set_scale(Vector2f { x: 2.0, y: 2.0 });
         body.set_texture(texture, false);
         window.draw(&body);
     }
