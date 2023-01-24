@@ -104,7 +104,7 @@ fn main() {
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
-        //demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
+        demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
         necromancer.draw(
             &mut window,
             texture_storage.get(TextureIdentifiers::Necromancer),
