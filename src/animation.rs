@@ -14,6 +14,7 @@ fn get_texture_size(identifier: TextureIdentifiers) -> Vector2i {
     let texture_size: Vector2i = match identifier {
         TextureIdentifiers::Player => Vector2i { x: 768, y: 1920 },
         TextureIdentifiers::Demon => Vector2i { x: 256, y: 36 },
+        TextureIdentifiers::Necromancer => Vector2i { x: 64, y: 20 },
         TextureIdentifiers::Tile => Vector2i { x: 64, y: 64 }, // should never be used, only here for completeness
     };
     texture_size

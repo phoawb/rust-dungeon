@@ -13,6 +13,9 @@ use map::Map;
 mod demon_enemy;
 use demon_enemy::Demon;
 
+use crate::necromancer::Necromancer;
+mod necromancer;
+
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
 const VIEW_SIZE: Vector2<f32> = Vector2f {
@@ -52,6 +55,7 @@ fn main() {
     texture_storage.load(TextureIdentifiers::Tile, "textures/tile_sheet.png");
     texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
     texture_storage.load(TextureIdentifiers::Demon, "textures/Demon.png");
+    texture_storage.load(TextureIdentifiers::Necromancer, "textures/necromancer.png");
 
     //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
@@ -64,6 +68,7 @@ fn main() {
 
     let mut player = Player::from(position);
     let mut demon: Demon = Demon::from(position);
+    let mut necromancer: Necromancer = Necromancer::from(position);
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -95,10 +100,15 @@ fn main() {
         window.set_view(&main_view);
         player.update();
         demon.update(player.get_position());
+        necromancer.update(player.get_position());
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
-        demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
+        //demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
+        necromancer.draw(
+            &mut window,
+            texture_storage.get(TextureIdentifiers::Necromancer),
+        );
         window.display();
     }
 }
