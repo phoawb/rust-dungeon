@@ -105,6 +105,7 @@ fn main() {
                 x: 768.0,
                 y: 480.0 * 4.0,
             },
+            map.get_active_room_doors(),
         ));
         map.set_active_room(player.get_position());
         demon.update(player.get_position());

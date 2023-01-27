@@ -1,36 +1,85 @@
+use rust_dungeon::Doors;
+use rust_dungeon::TILE_SIZE;
 use rust_dungeon::VIEW_SIZE;
 use sfml::system::Vector2f;
 
 pub fn player_collision_w_walls(
     player_position: Vector2f,
     upper_left_corner_coordinates: Vector2f,
+    room_doors: Doors,
 ) -> Vector2f {
     let mut updated_player_position: Vector2f = player_position;
-    let tile_size = 32.0;
     let x_padding = 10.0;
     let y_padding = 32.0;
 
-    if player_position.x < upper_left_corner_coordinates.x + tile_size + x_padding {
-        let delta_x = upper_left_corner_coordinates.x + tile_size + x_padding - player_position.x;
-        updated_player_position.x = player_position.x + delta_x;
-    } else if player_position.x
-        > upper_left_corner_coordinates.x + VIEW_SIZE.x - tile_size - x_padding
+    println!("player: {:?}", player_position);
+    println!(
+        "lower y: {:?}",
+        upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0
+    );
+    println!(
+        "higher y: {:?}",
+        upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0
+    );
+    println!("Right door is: {}", room_doors.right);
+    if room_doors.up
+        && player_position.x >= upper_left_corner_coordinates.x + TILE_SIZE.x * 11.0
+        && player_position.x <= upper_left_corner_coordinates.x + TILE_SIZE.x * 12.0
+        && player_position.y < upper_left_corner_coordinates.y + TILE_SIZE.y + y_padding
     {
-        let delta_x = player_position.x
-            - (upper_left_corner_coordinates.x + VIEW_SIZE.x - tile_size - x_padding);
-        updated_player_position.x = player_position.x - delta_x;
+        return updated_player_position;
+    }
+    if room_doors.down
+        && player_position.x >= upper_left_corner_coordinates.x + TILE_SIZE.x * 11.0
+        && player_position.x <= upper_left_corner_coordinates.x + TILE_SIZE.x * 12.0
+        && player_position.y
+            > upper_left_corner_coordinates.y + VIEW_SIZE.y - TILE_SIZE.y - y_padding
+    {
+        return updated_player_position;
     }
 
-    if player_position.y < upper_left_corner_coordinates.y + tile_size {
-        let delta_y = upper_left_corner_coordinates.y + tile_size - player_position.y;
-        updated_player_position.y = player_position.y + delta_y;
-    } else if player_position.y
-        > (upper_left_corner_coordinates.y + VIEW_SIZE.y - tile_size - y_padding)
+    if room_doors.left
+        && player_position.x < upper_left_corner_coordinates.x + TILE_SIZE.x + x_padding
+        && player_position.y >= upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0
+        && player_position.y <= upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0
     {
-        let delta_y = player_position.y + tile_size + y_padding
-            - (upper_left_corner_coordinates.y + VIEW_SIZE.y);
-        updated_player_position.y = player_position.y - delta_y;
+        return updated_player_position;
     }
-
+    if room_doors.right
+        && player_position.x
+            >= upper_left_corner_coordinates.x + VIEW_SIZE.x - TILE_SIZE.x - x_padding
+        && player_position.y >= upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0
+        && player_position.y <= upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0
+    {
+        return updated_player_position;
+    }
+    updated_player_position = collision_w_walls(player_position, upper_left_corner_coordinates);
     updated_player_position
+}
+
+pub fn collision_w_walls(position: Vector2f, upper_left_corner_coordinates: Vector2f) -> Vector2f {
+    let mut updated_position: Vector2f = position;
+    let x_padding = 10.0;
+    let y_padding = 32.0;
+
+    if position.x < upper_left_corner_coordinates.x + TILE_SIZE.x + x_padding {
+        let delta_x = upper_left_corner_coordinates.x + TILE_SIZE.x + x_padding - position.x;
+        updated_position.x = position.x + delta_x;
+    } else if position.x > upper_left_corner_coordinates.x + VIEW_SIZE.x - TILE_SIZE.x - x_padding {
+        let delta_x =
+            position.x - (upper_left_corner_coordinates.x + VIEW_SIZE.x - TILE_SIZE.x - x_padding);
+        updated_position.x = position.x - delta_x;
+    }
+
+    if position.y < upper_left_corner_coordinates.y + TILE_SIZE.y {
+        let delta_y = upper_left_corner_coordinates.y + TILE_SIZE.y - position.y;
+        updated_position.y = position.y + delta_y;
+    } else if position.y > (upper_left_corner_coordinates.y + VIEW_SIZE.y - TILE_SIZE.y - y_padding)
+    {
+        let delta_y =
+            position.y + TILE_SIZE.y + y_padding - (upper_left_corner_coordinates.y + VIEW_SIZE.y);
+        updated_position.y = position.y - delta_y;
+    }
+
+    updated_position
 }
