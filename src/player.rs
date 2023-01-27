@@ -151,6 +151,10 @@ impl Player {
         self.position
     }
 
+    pub fn set_position(&mut self, position: Vector2f) {
+        self.position = position;
+    }
+
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
