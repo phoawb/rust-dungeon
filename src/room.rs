@@ -1,5 +1,5 @@
 use crate::tile::Tile;
-use rust_dungeon::{CardinalDirection, RoomColor};
+use rust_dungeon::{CardinalDirection, RoomColor, TILE_SIZE, VIEW_SIZE};
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::{Vector2f, Vector2i},
@@ -57,9 +57,11 @@ impl Room {
     pub fn from(spawn_position: Vector2f) -> Room {
         let tile_spawn_position: Vector2f = spawn_position + Vector2f { x: 16.0, y: 16.0 };
         let mut room: Room = Room::new();
+        let amount_of_tiles_x_axis = VIEW_SIZE.x as i32 / TILE_SIZE.x as i32;
+        let amount_of_tiles_y_axis = VIEW_SIZE.y as i32 / TILE_SIZE.y as i32;
 
-        for i in 0..24 {
-            for j in 0..15 {
+        for i in 0..amount_of_tiles_x_axis {
+            for j in 0..amount_of_tiles_y_axis {
                 let image_count = get_image_count(i, j);
                 let tile = Tile::from(
                     Vector2f {
