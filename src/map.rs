@@ -1,7 +1,7 @@
 use crate::room::Room;
 use rand::Rng;
 use rand::{rngs::StdRng, SeedableRng};
-use rust_dungeon::{get_room_colors, CardinalDirection, RoomColor};
+use rust_dungeon::{get_room_colors, CardinalDirection, Doors, RoomColor};
 use sfml::system::Vector2f;
 use sfml::{
     graphics::{RenderWindow, Texture},
@@ -267,6 +267,10 @@ impl Map {
 
     pub fn get_active_room(&self) -> Vector2<usize> {
         self.active_room
+    }
+
+    pub fn get_active_room_doors(&self) -> Doors {
+        self.rooms[self.active_room.x][self.active_room.y].get_doors()
     }
 
     pub fn set_active_room(&mut self, player_position: Vector2f) {
