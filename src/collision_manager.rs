@@ -11,27 +11,22 @@ pub fn player_collision_w_walls(
     let mut updated_player_position: Vector2f = player_position;
     let x_padding = 10.0;
     let y_padding = 32.0;
+    let collision_padding = Vector2f::new(15.0, 20.0);
 
-    println!("player: {:?}", player_position);
-    println!(
-        "lower y: {:?}",
-        upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0
-    );
-    println!(
-        "higher y: {:?}",
-        upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0
-    );
-    println!("Right door is: {}", room_doors.right);
     if room_doors.up
-        && player_position.x >= upper_left_corner_coordinates.x + TILE_SIZE.x * 11.0
-        && player_position.x <= upper_left_corner_coordinates.x + TILE_SIZE.x * 12.0
+        && player_position.x
+            >= upper_left_corner_coordinates.x + TILE_SIZE.x * 11.0 - collision_padding.x
+        && player_position.x
+            <= upper_left_corner_coordinates.x + TILE_SIZE.x * 12.0 + collision_padding.x
         && player_position.y < upper_left_corner_coordinates.y + TILE_SIZE.y + y_padding
     {
         return updated_player_position;
     }
     if room_doors.down
-        && player_position.x >= upper_left_corner_coordinates.x + TILE_SIZE.x * 11.0
-        && player_position.x <= upper_left_corner_coordinates.x + TILE_SIZE.x * 12.0
+        && player_position.x
+            >= upper_left_corner_coordinates.x + TILE_SIZE.x * 11.0 - collision_padding.x
+        && player_position.x
+            <= upper_left_corner_coordinates.x + TILE_SIZE.x * 12.0 + collision_padding.x
         && player_position.y
             > upper_left_corner_coordinates.y + VIEW_SIZE.y - TILE_SIZE.y - y_padding
     {
@@ -40,16 +35,20 @@ pub fn player_collision_w_walls(
 
     if room_doors.left
         && player_position.x < upper_left_corner_coordinates.x + TILE_SIZE.x + x_padding
-        && player_position.y >= upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0
-        && player_position.y <= upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0
+        && player_position.y
+            >= upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0 - collision_padding.y
+        && player_position.y
+            <= upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0 + collision_padding.y
     {
         return updated_player_position;
     }
     if room_doors.right
         && player_position.x
             >= upper_left_corner_coordinates.x + VIEW_SIZE.x - TILE_SIZE.x - x_padding
-        && player_position.y >= upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0
-        && player_position.y <= upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0
+        && player_position.y
+            >= upper_left_corner_coordinates.y + TILE_SIZE.y * 6.0 - collision_padding.y
+        && player_position.y
+            <= upper_left_corner_coordinates.y + TILE_SIZE.y * 7.0 + collision_padding.y
     {
         return updated_player_position;
     }
