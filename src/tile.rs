@@ -1,4 +1,4 @@
-use rust_dungeon::RoomColor;
+use rust_dungeon::{RoomColor, TILE_SIZE};
 use sfml::{
     graphics::*,
     system::{Vector2f, Vector2i},
@@ -19,12 +19,11 @@ impl Tile {
     //Empty constructor
     pub fn new() -> Tile {
         // Size of one tile always set
-        let size = Vector2f { x: 32.0, y: 32.0 };
         Tile {
             position: Vector2f { x: 0.0, y: 0.0 },
             uv_rect: IntRect::new(0, 0, 16, 16),
-            size,
-            origin: size / 2.0,
+            size: TILE_SIZE,
+            origin: TILE_SIZE / 2.0,
         }
     }
 

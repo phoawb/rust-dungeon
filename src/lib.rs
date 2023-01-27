@@ -132,3 +132,4 @@ pub trait Body {
 }
 
 pub const VIEW_SIZE: Vector2<f32> = Vector2f { x: 768.0, y: 480.0 };
+pub const TILE_SIZE: Vector2f = Vector2f { x: 32.0, y: 32.0 };
