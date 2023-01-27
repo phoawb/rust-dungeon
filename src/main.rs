@@ -106,6 +106,7 @@ fn main() {
                 y: 480.0 * 4.0,
             },
         ));
+        map.set_active_room(player.get_position());
         demon.update(player.get_position());
         necromancer.update(player.get_position());
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));

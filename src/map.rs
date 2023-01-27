@@ -2,6 +2,7 @@ use crate::room::Room;
 use rand::Rng;
 use rand::{rngs::StdRng, SeedableRng};
 use rust_dungeon::{get_room_colors, CardinalDirection, RoomColor};
+use sfml::system::Vector2f;
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::Vector2,
@@ -19,6 +20,7 @@ pub struct Map {
     number_of_rooms: usize,
     spawn: Vector2<usize>,
     end: Vector2<usize>,
+    active_room: Vector2<usize>,
 }
 
 impl Map {
@@ -30,6 +32,7 @@ impl Map {
         }
         let spawn: Vector2<usize> = Vector2 { x: 4, y: 4 };
         let end: Vector2<usize> = Vector2 { x: 4, y: 4 };
+        let active_room: Vector2<usize> = Vector2 { x: 4, y: 4 };
         Map {
             grid_size,
             rooms: Vec::new(),
@@ -37,6 +40,7 @@ impl Map {
             number_of_rooms,
             spawn,
             end,
+            active_room,
         }
     }
 
@@ -181,6 +185,7 @@ impl Map {
         let colors = get_room_colors(&adjacency_list, num_colors, seed);
         self.set_room_colors(colors);
         self.spawn = self.get_farthest_coordinate(starting_coordinates);
+        self.active_room = self.spawn;
         self.rooms[self.spawn.x][self.spawn.y].set_color(RoomColor::Red);
         self.end = self.get_farthest_coordinate(self.spawn);
         self.rooms[self.end.x][self.end.y].set_color(RoomColor::Red);
@@ -258,5 +263,31 @@ impl Map {
             adjacency_list.insert(index, neighbouring_room_indexes);
         }
         adjacency_list
+    }
+
+    pub fn get_active_room(&self) -> Vector2<usize> {
+        self.active_room
+    }
+
+    pub fn set_active_room(&mut self, player_position: Vector2f) {
+        if self.rooms[self.active_room.x][self.active_room.y].contains_player(player_position) {
+            return;
+        }
+        for direction in CardinalDirection::iter() {
+            let neighbouring_room_coordinates =
+                direction.get_direction_coordinates(self.active_room);
+            if !self
+                .taken_positions
+                .contains(&neighbouring_room_coordinates)
+            {
+                continue;
+            }
+            if !self.rooms[neighbouring_room_coordinates.x][neighbouring_room_coordinates.y]
+                .contains_player(player_position)
+            {
+                continue;
+            }
+            self.active_room = neighbouring_room_coordinates;
+        }
     }
 }
