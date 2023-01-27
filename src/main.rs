@@ -95,19 +95,26 @@ fn main() {
             }
         }
 
+        let mut active_room = map.get_active_room();
         // drawing
         window.clear(Color::BLACK);
         window.set_view(&main_view);
         player.update();
         player.set_position(player_collision_w_walls(
             player.get_position(),
-            Vector2f {
-                x: 768.0,
-                y: 480.0 * 4.0,
-            },
+            Vector2f::new(
+                active_room.x as f32 * VIEW_SIZE.x,
+                active_room.y as f32 * VIEW_SIZE.y,
+            ),
             map.get_active_room_doors(),
         ));
         map.set_active_room(player.get_position());
+        active_room = map.get_active_room();
+        let new_center = Vector2f::new(
+            active_room.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,
+            active_room.y as f32 * VIEW_SIZE.y + VIEW_SIZE.y / 2.0,
+        );
+        main_view.set_center(new_center);
         demon.update(player.get_position());
         necromancer.update(player.get_position());
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
@@ -123,8 +130,7 @@ fn main() {
 }
 
 // TODO NEXT:
-// * Implement player collision with walls
-// * Implement enemy -||-
+// * Implement enemy  collision with walls
 
 /* TODO For collision:
 * Create a vector of enemy bullets & player bullets that live in main
