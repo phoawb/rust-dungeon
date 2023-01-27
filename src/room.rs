@@ -1,18 +1,10 @@
 use crate::tile::Tile;
-use rust_dungeon::{CardinalDirection, RoomColor, TILE_SIZE, VIEW_SIZE};
+use rust_dungeon::{CardinalDirection, Doors, RoomColor, TILE_SIZE, VIEW_SIZE};
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::{Vector2f, Vector2i},
     SfBox,
 };
-
-#[derive(Debug)]
-struct Doors {
-    up: bool,
-    down: bool,
-    right: bool,
-    left: bool,
-}
 
 #[derive(Debug)]
 pub struct Room {
@@ -126,6 +118,10 @@ impl Room {
             CardinalDirection::Left => self.doors.left,
             CardinalDirection::Right => self.doors.right,
         }
+    }
+
+    pub fn get_doors(&self) -> Doors {
+        self.doors
     }
 
     pub fn contains_player(&self, player_position: Vector2f) -> bool {
