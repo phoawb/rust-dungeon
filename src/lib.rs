@@ -131,5 +131,7 @@ pub trait Body {
     }
 }
 
+// Pixel size of the view & consequently a room;
 pub const VIEW_SIZE: Vector2<f32> = Vector2f { x: 768.0, y: 480.0 };
+//Pixel size of a tile
 pub const TILE_SIZE: Vector2f = Vector2f { x: 32.0, y: 32.0 };
