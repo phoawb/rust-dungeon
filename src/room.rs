@@ -19,6 +19,7 @@ pub struct Room {
     tiles: Vec<Vec<Tile>>,
     doors: Doors,
     color: RoomColor,
+    spawn_position: Vector2f,
 }
 
 fn get_image_count(i: i32, j: i32) -> Vector2i {
@@ -46,6 +47,7 @@ impl Room {
                 left: false,
             },
             color: RoomColor::Brown,
+            spawn_position: Vector2f { x: 0.0, y: 0.0 },
         };
         for _i in 0..24 {
             room.tiles.push(Vec::new());
@@ -57,6 +59,7 @@ impl Room {
     pub fn from(spawn_position: Vector2f) -> Room {
         let tile_spawn_position: Vector2f = spawn_position + Vector2f { x: 16.0, y: 16.0 };
         let mut room: Room = Room::new();
+        room.spawn_position = spawn_position;
         let amount_of_tiles_x_axis = VIEW_SIZE.x as i32 / TILE_SIZE.x as i32;
         let amount_of_tiles_y_axis = VIEW_SIZE.y as i32 / TILE_SIZE.y as i32;
 
@@ -123,5 +126,20 @@ impl Room {
             CardinalDirection::Left => self.doors.left,
             CardinalDirection::Right => self.doors.right,
         }
+    }
+
+    pub fn contains_player(&self, player_position: Vector2f) -> bool {
+        if player_position.x < self.spawn_position.x
+            || player_position.x > self.spawn_position.x + VIEW_SIZE.x
+        {
+            return false;
+        }
+
+        if player_position.y < self.spawn_position.y
+            || player_position.y > self.spawn_position.y + VIEW_SIZE.y
+        {
+            return false;
+        }
+        true
     }
 }
