@@ -130,3 +130,5 @@ pub trait Body {
         body
     }
 }
+
+pub const VIEW_SIZE: Vector2<f32> = Vector2f { x: 768.0, y: 480.0 };

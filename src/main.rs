@@ -11,24 +11,22 @@ use player::Player;
 mod map;
 use map::Map;
 mod demon_enemy;
-use demon_enemy::Demon;
-
 use crate::necromancer::Necromancer;
+use demon_enemy::Demon;
+mod collision_manager;
 mod necromancer;
+use collision_manager::player_collision_w_walls;
+use rust_dungeon::VIEW_SIZE;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
-const VIEW_SIZE: Vector2<f32> = Vector2f {
-    x: WIDTH as f32,
-    y: HEIGHT as f32,
-};
 
 fn resize_view(window: &RenderWindow, view: &mut View) {
     let aspect_ratio: f32 = window.size().x as f32 / window.size().y as f32;
     println!("Aspect ratio is: {}", aspect_ratio);
     let new_size = Vector2f {
-        x: aspect_ratio * VIEW_SIZE.y * 9.0,
-        y: VIEW_SIZE.y * 9.0,
+        x: aspect_ratio * VIEW_SIZE.y, //* 9.0,
+        y: VIEW_SIZE.y,                // * 9.0,
     };
     view.set_size(new_size);
 }
@@ -67,6 +65,8 @@ fn main() {
     };
 
     let mut player = Player::from(position);
+    main_view.set_size(VIEW_SIZE);
+    main_view.set_center(player.get_position());
     let mut demon: Demon = Demon::from(position);
     let mut necromancer: Necromancer = Necromancer::from(position);
     loop {
@@ -99,22 +99,28 @@ fn main() {
         window.clear(Color::BLACK);
         window.set_view(&main_view);
         player.update();
+        player.set_position(player_collision_w_walls(
+            player.get_position(),
+            Vector2f {
+                x: 768.0,
+                y: 480.0 * 4.0,
+            },
+        ));
         demon.update(player.get_position());
         necromancer.update(player.get_position());
         //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
-        demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
+        /*         demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
         necromancer.draw(
             &mut window,
             texture_storage.get(TextureIdentifiers::Necromancer),
-        );
+        ); */
         window.display();
     }
 }
 
 // TODO NEXT:
-// * Implement the biter enemy
 // * Implement player collision with walls
 // * Implement enemy -||-
 
