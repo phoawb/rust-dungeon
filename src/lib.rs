@@ -88,9 +88,7 @@ pub fn get_room_colors(
     let mut rng = StdRng::seed_from_u64(seed);
 
     // Iterate through the remaining rooms
-    for i in 1..indices.len() {
-        let room = indices[i];
-
+    for room in indices {
         // Find a random color that is not used by any of its adjacent rooms
         let mut color = rng.gen_range(0..num_colors);
         println!("firsst color is: {}", color);
@@ -106,12 +104,11 @@ pub fn get_room_colors(
             available_colors[adjacent_room][color] = false;
         }
     }
-    let color_map = colors
+    colors
         .into_iter()
         .enumerate()
         .map(|(i, c)| (i, c))
-        .collect();
-    color_map
+        .collect()
 }
 
 pub trait Body {
