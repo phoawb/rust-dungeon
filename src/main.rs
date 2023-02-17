@@ -12,18 +12,20 @@ mod map;
 use map::Map;
 mod demon_enemy;
 use crate::necromancer::Necromancer;
+use crate::projectile::Projectile;
 use demon_enemy::Demon;
 mod collision_manager;
 mod necromancer;
 use collision_manager::player_collision_w_walls;
 use rust_dungeon::VIEW_SIZE;
+mod projectile;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
 
 fn resize_view(window: &RenderWindow, view: &mut View) {
     let aspect_ratio: f32 = window.size().x as f32 / window.size().y as f32;
-    println!("Aspect ratio is: {}", aspect_ratio);
+    println!("Aspect ratio is: {aspect_ratio}");
     let new_size = Vector2f {
         x: aspect_ratio * VIEW_SIZE.y, //* 9.0,
         y: VIEW_SIZE.y,                // * 9.0,
@@ -54,8 +56,11 @@ fn main() {
     texture_storage.load(TextureIdentifiers::Player, "textures/Pitaya.png");
     texture_storage.load(TextureIdentifiers::Demon, "textures/Demon.png");
     texture_storage.load(TextureIdentifiers::Necromancer, "textures/necromancer.png");
+    texture_storage.load(
+        TextureIdentifiers::Projectile,
+        "textures/water_projectile.png",
+    );
 
-    //let room = Room::from(Vector2f { x: 0.0, y: 0.0 });
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
     map.start(None);
     let spawn = map.get_spawn();
@@ -65,6 +70,7 @@ fn main() {
     };
 
     let mut player = Player::from(position);
+    let mut player_projectiles: Vec<Projectile> = Vec::new();
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
     let mut demon: Demon = Demon::from(position);
@@ -84,11 +90,14 @@ fn main() {
                     resize_view(&window, &mut main_view);
                     println!("Resize event activated!")
                 }
-                Event::MouseButtonPressed {
-                    button: _,
-                    x: _,
-                    y: _,
-                } => {
+                Event::MouseButtonPressed { button, x, y } => {
+                    //player.shoot();
+                    let mouse_coords = window.map_pixel_to_coords(Vector2i { x, y }, &main_view);
+                    player_projectiles.push(player.shoot(mouse_coords));
+                    println!("{button:?}");
+                    println!("x: {x}, y: {y}");
+                    println!("moouse coords are: {mouse_coords:?}");
+                    println!("player position is: {:?}", player.get_position());
                     println!("Mouse button was pressed!")
                 }
                 _ => {}
@@ -108,6 +117,7 @@ fn main() {
             ),
             map.get_active_room_doors(),
         ));
+        // update the view to show the room the player is in
         map.set_active_room(player.get_position());
         active_room = map.get_active_room();
         let new_center = Vector2f::new(
@@ -115,16 +125,24 @@ fn main() {
             active_room.y as f32 * VIEW_SIZE.y + VIEW_SIZE.y / 2.0,
         );
         main_view.set_center(new_center);
+        // update non-player entities
         demon.update(player.get_position());
         necromancer.update(player.get_position());
-        //room.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
+        // draw everything
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
+        for projectile in player_projectiles.iter_mut() {
+            (*projectile).update();
+            (*projectile).draw(
+                &mut window,
+                texture_storage.get(TextureIdentifiers::Projectile),
+            );
+        }
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
-        /*         demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
+        demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
         necromancer.draw(
             &mut window,
             texture_storage.get(TextureIdentifiers::Necromancer),
-        ); */
+        );
         window.display();
     }
 }

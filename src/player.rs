@@ -1,5 +1,5 @@
-use crate::animation::Animation;
 use crate::texture_storage::TextureIdentifiers;
+use crate::{animation::Animation, projectile::Projectile};
 use rust_dungeon::Body;
 use sfml::{
     graphics::*,
@@ -153,6 +153,15 @@ impl Player {
 
     pub fn set_position(&mut self, position: Vector2f) {
         self.position = position;
+    }
+
+    pub fn shoot(&self, mouse_coords: Vector2f) -> Projectile {
+        let direction = mouse_coords - self.position;
+        let normalized_direction =
+            direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
+        //TODO: PUT THIS AS A VAR IN LIB
+        let projectile_size = Vector2f::new(64.0, 64.0);
+        Projectile::new(self.position, projectile_size, normalized_direction)
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {

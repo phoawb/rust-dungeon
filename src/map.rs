@@ -58,7 +58,7 @@ impl Map {
         }
 
         //TODO: PROPERLY HANDLE USER HAVING CHOSEN SEED OR NOT
-        println!("The seed is: {}", seed);
+        println!("The seed is: {seed}");
         let mut rng = StdRng::seed_from_u64(seed);
 
         // 1. Start by initializing the first room at a random (read: middle) position on the grid.
@@ -177,7 +177,7 @@ impl Map {
             x: random_x_coord,
             y: random_y_coord,
         };
-        println!("The random start is: {:?}", starting_coordinates);
+        println!("The random start is: {starting_coordinates:?}");
         self.create_rooms(seed, starting_coordinates);
         self.set_room_doors(seed, probability);
         let adjacency_list = self.get_adjacency_list();
