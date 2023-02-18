@@ -49,13 +49,13 @@ impl Necromancer {
         let y_dif: f32 = player_position.y - self.position.y;
 
         let mut movement = Vector2f { x: x_dif, y: y_dif };
-        self.face_right = if x_dif < 0.0 { false } else { true };
+        self.face_right = x_dif >= 0.0;
         self.animation.update(self.row, self.face_right);
         if movement.x == 0.0 && movement.y == 0.0 {
             return;
         }
-        movement.x = movement.x / (x_dif * x_dif + y_dif * y_dif).sqrt();
-        movement.y = movement.y / (x_dif * x_dif + y_dif * y_dif).sqrt();
+        movement.x /= (x_dif * x_dif + y_dif * y_dif).sqrt();
+        movement.y /= (x_dif * x_dif + y_dif * y_dif).sqrt();
         if (x_dif * x_dif + y_dif * y_dif).sqrt() <= 250.0 {
             movement.x = -movement.x;
             movement.y = -movement.y;
