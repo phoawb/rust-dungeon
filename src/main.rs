@@ -178,7 +178,6 @@ fn is_enemy_in_active_room(position: Vector2f, upper_left_corner_coordinates: Ve
 }
 
 // TODO NEXT:
-// * Implement enemy  collision with walls
 
 /* TODO For collision:
 * Create a vector of enemy bullets & player bullets that live in main
