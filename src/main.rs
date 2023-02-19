@@ -9,6 +9,7 @@ mod animation;
 mod player;
 use player::Player;
 mod map;
+use crate::collision_manager::collision_w_walls;
 use crate::projectile::Projectile;
 use map::Map;
 mod collision_manager;
@@ -73,8 +74,9 @@ fn main() {
     let mut player_projectiles: Vec<Projectile> = Vec::new();
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
-    let mut demon: Demon = Demon::new(position);
-    let mut necromancer: Necromancer = Necromancer::new(position);
+    let demon: Demon = Demon::new(position);
+    let necromancer: Necromancer = Necromancer::new(position);
+    let mut enemies: Vec<Box<dyn Enemy>> = vec![Box::new(demon), Box::new(necromancer)];
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -108,13 +110,14 @@ fn main() {
         // drawing
         window.clear(Color::BLACK);
         window.set_view(&main_view);
+        let upper_left_corner_coordinates = Vector2f::new(
+            active_room.x as f32 * VIEW_SIZE.x,
+            active_room.y as f32 * VIEW_SIZE.y,
+        );
         player.update();
         player.set_position(player_collision_w_walls(
             player.get_position(),
-            Vector2f::new(
-                active_room.x as f32 * VIEW_SIZE.x,
-                active_room.y as f32 * VIEW_SIZE.y,
-            ),
+            upper_left_corner_coordinates,
             map.get_active_room_doors(),
         ));
         // update the view to show the room the player is in
@@ -126,8 +129,20 @@ fn main() {
         );
         main_view.set_center(new_center);
         // update non-player entities
-        demon.update(player.get_position());
-        necromancer.update(player.get_position());
+        //demon.update(player.get_position());
+        //necromancer.update(player.get_position());
+        let player_position = player.get_position();
+        for enemy in enemies.iter_mut() {
+            if !is_enemy_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
+                continue;
+            }
+            enemy.update(player_position);
+            enemy.set_position(collision_w_walls(
+                enemy.get_position(),
+                upper_left_corner_coordinates,
+            ))
+        }
+
         // draw everything
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
         for projectile in player_projectiles.iter_mut() {
@@ -138,13 +153,28 @@ fn main() {
             );
         }
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
-        demon.draw(&mut window, texture_storage.get(TextureIdentifiers::Demon));
-        necromancer.draw(
-            &mut window,
-            texture_storage.get(TextureIdentifiers::Necromancer),
-        );
+        for enemy in enemies.iter_mut() {
+            if !is_enemy_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
+                continue;
+            }
+            enemy.draw(&mut window, texture_storage.get(enemy.get_identifier()))
+        }
         window.display();
     }
+}
+
+fn is_enemy_in_active_room(position: Vector2f, upper_left_corner_coordinates: Vector2f) -> bool {
+    if position.x < upper_left_corner_coordinates.x
+        || position.x > upper_left_corner_coordinates.x + VIEW_SIZE.x
+    {
+        return false;
+    }
+    if position.y < upper_left_corner_coordinates.y
+        || position.x > upper_left_corner_coordinates.y + VIEW_SIZE.y
+    {
+        return false;
+    }
+    true
 }
 
 // TODO NEXT:

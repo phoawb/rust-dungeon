@@ -5,7 +5,9 @@ use sfml::{
     SfBox,
 };
 
-use crate::animation::Animation;
+use crate::{animation::Animation, texture_storage::TextureIdentifiers};
+
+use super::enemy::Enemy;
 
 pub struct Necromancer {
     hp: i32,
@@ -17,18 +19,19 @@ pub struct Necromancer {
     animation: Animation,
     speed: f32,
     face_right: bool,
+    texture_identifer: TextureIdentifiers,
     //points: i32,
 }
 
-impl Necromancer {
-    pub fn new(position: Vector2f) -> Necromancer {
+impl Default for Necromancer {
+    fn default() -> Self {
         let size = Vector2f { x: 16.0, y: 20.0 };
         let image_count: Vector2i = Vector2i { x: 4, y: 1 };
         let switch_time: f32 = 0.2;
         Necromancer {
             hp: 40,
             //damage: 5,
-            position,
+            position: Vector2f::new(0.0, 0.0),
             size,
             origin: size / 2.0,
             row: 0,
@@ -39,12 +42,22 @@ impl Necromancer {
             ),
             speed: 1.0,
             face_right: false,
+            texture_identifer: TextureIdentifiers::Necromancer,
+        }
+    }
+}
+
+impl Enemy for Necromancer {
+    fn new(position: Vector2f) -> Necromancer {
+        Necromancer {
+            position,
+            ..Default::default()
         }
     }
 
     //The necromancer tries to keep a set distance from the player
     //in order to shoot them
-    pub fn update(&mut self, player_position: Vector2f) {
+    fn update(&mut self, player_position: Vector2f) {
         let x_dif: f32 = player_position.x - self.position.x;
         let y_dif: f32 = player_position.y - self.position.y;
 
@@ -64,7 +77,19 @@ impl Necromancer {
         self.position += movement;
     }
 
-    pub fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
+    fn get_identifier(&self) -> TextureIdentifiers {
+        self.texture_identifer
+    }
+
+    fn set_position(&mut self, position: Vector2f) {
+        self.position = position;
+    }
+
+    fn get_position(&self) -> Vector2f {
+        self.position
+    }
+
+    fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
             self.position,

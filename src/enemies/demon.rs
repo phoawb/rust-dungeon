@@ -5,7 +5,7 @@ use sfml::{
     SfBox,
 };
 
-use crate::animation::Animation;
+use crate::{animation::Animation, texture_storage::TextureIdentifiers};
 
 use super::enemy::Enemy;
 
@@ -19,20 +19,22 @@ pub struct Demon {
     animation: Animation,
     speed: f32,
     face_right: bool,
+    texture_identifier: TextureIdentifiers,
     //points: i32,
 }
 
-impl Enemy for Demon {
-    fn new(position: Vector2f) -> Self {
+impl Default for Demon {
+    fn default() -> Self {
         let size = Vector2f { x: 32.0, y: 36.0 };
+        let origin = size / 2.0;
+        let texture_identifier = TextureIdentifiers::Demon;
         let image_count: Vector2i = Vector2i { x: 8, y: 1 };
-        let switch_time: f32 = 0.2;
+        let switch_time = 0.2;
         Demon {
             hp: 60,
-            //damage: 10
-            position,
-            size,
-            origin: size / 2.0,
+            position: Vector2f::new(0.0, 0.0),
+            size: Vector2f::new(32.0, 36.0),
+            origin,
             row: 0,
             animation: Animation::from(
                 crate::texture_storage::TextureIdentifiers::Demon,
@@ -41,6 +43,16 @@ impl Enemy for Demon {
             ),
             speed: 2.0,
             face_right: false,
+            texture_identifier,
+        }
+    }
+}
+
+impl Enemy for Demon {
+    fn new(position: Vector2f) -> Demon {
+        Demon {
+            position,
+            ..Default::default()
         }
     }
 
@@ -58,6 +70,18 @@ impl Enemy for Demon {
         movement.y /= (x_dif * x_dif + y_dif * y_dif).sqrt();
         movement *= self.speed;
         self.position += movement;
+    }
+
+    fn get_identifier(&self) -> TextureIdentifiers {
+        self.texture_identifier
+    }
+
+    fn set_position(&mut self, position: Vector2f) {
+        self.position = position;
+    }
+
+    fn get_position(&self) -> Vector2f {
+        self.position
     }
 
     fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {

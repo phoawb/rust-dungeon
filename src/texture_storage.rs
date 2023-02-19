@@ -25,7 +25,7 @@ impl TextureStorage {
     }
 }
 
-#[derive(PartialEq, Eq, Hash)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
 pub enum TextureIdentifiers {
     Tile,
     Player,
