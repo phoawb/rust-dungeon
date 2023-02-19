@@ -1,6 +1,7 @@
 mod room;
 mod texture_storage;
 mod tile;
+
 use sfml::graphics::*;
 use sfml::system::*;
 use sfml::window::*;
@@ -10,6 +11,7 @@ mod player;
 use player::Player;
 mod map;
 use crate::collision_manager::collision_w_walls;
+use crate::collision_manager::projectile_collision_w_walls;
 use crate::projectile::Projectile;
 use map::Map;
 mod collision_manager;
@@ -145,12 +147,37 @@ fn main() {
 
         // draw everything
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
-        for projectile in player_projectiles.iter_mut() {
+        /*         for projectile in player_projectiles.iter_mut() {
             (*projectile).update();
+            if projectile_collision_w_walls(
+                projectile.get_position(),
+                upper_left_corner_coordinates,
+            ) {
+                player_projectiles.remove(
+                    player_projectiles
+                        .iter()
+                        .position(|&p| p == projectile)
+                        .unwrap(),
+                );
+            }
             (*projectile).draw(
                 &mut window,
                 texture_storage.get(TextureIdentifiers::Projectile),
             );
+        } */
+        for i in (0..player_projectiles.len()).rev() {
+            player_projectiles[i].update();
+            if projectile_collision_w_walls(
+                player_projectiles[i].get_position(),
+                upper_left_corner_coordinates,
+            ) {
+                player_projectiles.remove(i);
+                continue;
+            }
+            player_projectiles[i].draw(
+                &mut window,
+                texture_storage.get(TextureIdentifiers::Projectile),
+            )
         }
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
         for enemy in enemies.iter_mut() {

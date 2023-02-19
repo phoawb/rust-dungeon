@@ -40,6 +40,10 @@ impl Projectile {
         let face_right = true;
         self.animation.update(row, face_right)
     }
+
+    pub fn get_position(&self) -> Vector2f {
+        self.position
+    }
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,

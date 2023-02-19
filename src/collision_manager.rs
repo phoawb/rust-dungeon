@@ -82,3 +82,25 @@ pub fn collision_w_walls(position: Vector2f, upper_left_corner_coordinates: Vect
 
     updated_position
 }
+
+pub fn projectile_collision_w_walls(
+    position: Vector2f,
+    upper_left_corner_coordinates: Vector2f,
+) -> bool {
+    let x_padding = 10.0;
+    let y_padding = 32.0;
+
+    if position.x < upper_left_corner_coordinates.x + TILE_SIZE.x + x_padding
+        || position.x > upper_left_corner_coordinates.x + VIEW_SIZE.x - TILE_SIZE.x - x_padding
+    {
+        return true;
+    }
+
+    if position.y < upper_left_corner_coordinates.y + TILE_SIZE.y
+        || position.y > (upper_left_corner_coordinates.y + VIEW_SIZE.y - TILE_SIZE.y - y_padding)
+    {
+        return true;
+    }
+
+    false
+}
