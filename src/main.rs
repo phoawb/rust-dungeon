@@ -133,7 +133,7 @@ fn main() {
         //necromancer.update(player.get_position());
         let player_position = player.get_position();
         for enemy in enemies.iter_mut() {
-            if !is_enemy_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
+            if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
                 continue;
             }
             enemy.update(player_position);
@@ -154,7 +154,7 @@ fn main() {
         }
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
         for enemy in enemies.iter_mut() {
-            if !is_enemy_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
+            if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
                 continue;
             }
             enemy.draw(&mut window, texture_storage.get(enemy.get_identifier()))
@@ -163,7 +163,7 @@ fn main() {
     }
 }
 
-fn is_enemy_in_active_room(position: Vector2f, upper_left_corner_coordinates: Vector2f) -> bool {
+fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: Vector2f) -> bool {
     if position.x < upper_left_corner_coordinates.x
         || position.x > upper_left_corner_coordinates.x + VIEW_SIZE.x
     {
