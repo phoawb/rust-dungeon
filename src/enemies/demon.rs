@@ -7,6 +7,8 @@ use sfml::{
 
 use crate::animation::Animation;
 
+use super::enemy::Enemy;
+
 pub struct Demon {
     hp: i32,
     //damage: i32,
@@ -20,8 +22,8 @@ pub struct Demon {
     //points: i32,
 }
 
-impl Demon {
-    pub fn from(position: Vector2f) -> Demon {
+impl Enemy for Demon {
+    fn new(position: Vector2f) -> Self {
         let size = Vector2f { x: 32.0, y: 36.0 };
         let image_count: Vector2i = Vector2i { x: 8, y: 1 };
         let switch_time: f32 = 0.2;
@@ -43,7 +45,7 @@ impl Demon {
     }
 
     //The demon chases the player in order to hurt them
-    pub fn update(&mut self, player_position: Vector2f) {
+    fn update(&mut self, player_position: Vector2f) {
         let x_dif: f32 = player_position.x - self.position.x;
         let y_dif: f32 = player_position.y - self.position.y;
         let mut movement = Vector2f { x: x_dif, y: y_dif };
@@ -58,7 +60,7 @@ impl Demon {
         self.position += movement;
     }
 
-    pub fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
+    fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
             self.position,

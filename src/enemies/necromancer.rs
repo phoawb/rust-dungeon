@@ -21,7 +21,7 @@ pub struct Necromancer {
 }
 
 impl Necromancer {
-    pub fn from(position: Vector2f) -> Necromancer {
+    pub fn new(position: Vector2f) -> Necromancer {
         let size = Vector2f { x: 16.0, y: 20.0 };
         let image_count: Vector2i = Vector2i { x: 4, y: 1 };
         let switch_time: f32 = 0.2;

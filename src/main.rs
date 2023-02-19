@@ -9,16 +9,16 @@ mod animation;
 mod player;
 use player::Player;
 mod map;
-use map::Map;
-mod demon;
-use crate::necromancer::Necromancer;
 use crate::projectile::Projectile;
-use demon::Demon;
+use map::Map;
 mod collision_manager;
-mod necromancer;
 use collision_manager::player_collision_w_walls;
 use rust_dungeon::VIEW_SIZE;
+mod enemies;
 mod projectile;
+use crate::enemies::enemy::Enemy;
+use enemies::demon::Demon;
+use enemies::necromancer::Necromancer;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
@@ -73,8 +73,8 @@ fn main() {
     let mut player_projectiles: Vec<Projectile> = Vec::new();
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
-    let mut demon: Demon = Demon::from(position);
-    let mut necromancer: Necromancer = Necromancer::from(position);
+    let mut demon: Demon = Demon::new(position);
+    let mut necromancer: Necromancer = Necromancer::new(position);
     loop {
         // events
         while let Some(ev) = window.poll_event() {
