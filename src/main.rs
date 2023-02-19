@@ -204,7 +204,7 @@ fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: V
     true
 }
 
-// TODO NEXT: implement projectile wall collision
+// TODO NEXT:
 
 /* TODO For collision:
 * Create a vector of enemy bullets & player bullets that live in main
