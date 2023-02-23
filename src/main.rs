@@ -199,10 +199,11 @@ fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: V
  */
 
 /* TODO MAP & ROOMS
-* Get the number of rooms
-* Store the index of the actve room
-* Have a method to get the active room
-* have a function to set active room based on player location
+* Implement minimap
+ * when press E toggle view size
+ * stop updating shit
+ * display score
+ * implement spawning per room
  */
 
 /* TODO COLLISIONS
