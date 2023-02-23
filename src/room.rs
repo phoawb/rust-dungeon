@@ -138,4 +138,8 @@ impl Room {
         }
         true
     }
+
+    pub fn get_spawn_position(&self) -> Vector2f {
+        self.spawn_position
+    }
 }
