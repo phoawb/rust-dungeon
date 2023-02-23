@@ -1,7 +1,7 @@
 use crate::room::Room;
 use rand::Rng;
 use rand::{rngs::StdRng, SeedableRng};
-use rust_dungeon::{get_room_colors, CardinalDirection, Doors, RoomColor};
+use rust_dungeon::{get_room_colors, CardinalDirection, Doors, RoomColor, VIEW_SIZE};
 use sfml::system::Vector2f;
 use sfml::{
     graphics::{RenderWindow, Texture},
@@ -293,5 +293,15 @@ impl Map {
             }
             self.active_room = neighbouring_room_coordinates;
         }
+    }
+    pub fn get_room_centers(&self) -> Vec<Vector2f> {
+        let mut room_centers: Vec<Vector2f> = Vec::new();
+
+        for position in &self.taken_positions {
+            let room_center =
+                self.rooms[position.x][position.y].get_spawn_position() + VIEW_SIZE / 2.0;
+            room_centers.push(room_center);
+        }
+        room_centers
     }
 }
