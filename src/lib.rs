@@ -91,7 +91,6 @@ pub fn get_room_colors(
     for room in indices {
         // Find a random color that is not used by any of its adjacent rooms
         let mut color = rng.gen_range(0..num_colors);
-        println!("firsst color is: {color}");
         while !available_colors[room][color] {
             color = rng.gen_range(0..num_colors);
         }
