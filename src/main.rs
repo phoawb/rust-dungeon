@@ -131,8 +131,6 @@ fn main() {
         );
         main_view.set_center(new_center);
         // update non-player entities
-        //demon.update(player.get_position());
-        //necromancer.update(player.get_position());
         let player_position = player.get_position();
         for enemy in enemies.iter_mut() {
             if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
@@ -147,24 +145,6 @@ fn main() {
 
         // draw everything
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
-        /*         for projectile in player_projectiles.iter_mut() {
-            (*projectile).update();
-            if projectile_collision_w_walls(
-                projectile.get_position(),
-                upper_left_corner_coordinates,
-            ) {
-                player_projectiles.remove(
-                    player_projectiles
-                        .iter()
-                        .position(|&p| p == projectile)
-                        .unwrap(),
-                );
-            }
-            (*projectile).draw(
-                &mut window,
-                texture_storage.get(TextureIdentifiers::Projectile),
-            );
-        } */
         for i in (0..player_projectiles.len()).rev() {
             player_projectiles[i].update();
             if projectile_collision_w_walls(
