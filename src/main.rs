@@ -12,6 +12,7 @@ use player::Player;
 mod map;
 use crate::collision_manager::collision_w_walls;
 use crate::collision_manager::projectile_collision_w_walls;
+use crate::enemies::enemy::spawn_enemies;
 use crate::projectile::Projectile;
 use map::Map;
 mod collision_manager;
@@ -19,9 +20,6 @@ use collision_manager::player_collision_w_walls;
 use rust_dungeon::VIEW_SIZE;
 mod enemies;
 mod projectile;
-use crate::enemies::enemy::Enemy;
-use enemies::demon::Demon;
-use enemies::necromancer::Necromancer;
 
 const WIDTH: u32 = 768;
 const HEIGHT: u32 = 480;
@@ -76,9 +74,16 @@ fn main() {
     let mut player_projectiles: Vec<Projectile> = Vec::new();
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
-    let demon: Demon = Demon::new(position);
-    let necromancer: Necromancer = Necromancer::new(position);
-    let mut enemies: Vec<Box<dyn Enemy>> = vec![Box::new(demon), Box::new(necromancer)];
+    //let demon: Demon = Demon::new(position);
+    //let necromancer: Necromancer = Necromancer::new(position);
+    //let mut enemies: Vec<Box<dyn Enemy>> = vec![Box::new(demon), Box::new(necromancer)];
+    let mut map_enemies = spawn_enemies(map.get_room_centers());
+    for room_enemies in &map_enemies {
+        println!(
+            "The position of room enemies are: {pos:?}",
+            pos = room_enemies[0].get_position()
+        );
+    }
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -112,7 +117,7 @@ fn main() {
         // drawing
         window.clear(Color::BLACK);
         window.set_view(&main_view);
-        let upper_left_corner_coordinates = Vector2f::new(
+        let mut upper_left_corner_coordinates = Vector2f::new(
             active_room.x as f32 * VIEW_SIZE.x,
             active_room.y as f32 * VIEW_SIZE.y,
         );
@@ -125,6 +130,11 @@ fn main() {
         // update the view to show the room the player is in
         map.set_active_room(player.get_position());
         active_room = map.get_active_room();
+        upper_left_corner_coordinates = Vector2f::new(
+            active_room.x as f32 * VIEW_SIZE.x,
+            active_room.y as f32 * VIEW_SIZE.y,
+        );
+        let active_room_index = map.get_active_room_index();
         let new_center = Vector2f::new(
             active_room.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,
             active_room.y as f32 * VIEW_SIZE.y + VIEW_SIZE.y / 2.0,
@@ -132,7 +142,7 @@ fn main() {
         main_view.set_center(new_center);
         // update non-player entities
         let player_position = player.get_position();
-        for enemy in enemies.iter_mut() {
+        for enemy in map_enemies[active_room_index].iter_mut() {
             if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
                 continue;
             }
@@ -160,10 +170,16 @@ fn main() {
             )
         }
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
-        for enemy in enemies.iter_mut() {
-            if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
+
+        /*         println!(
+            "Active room center is: {center:?}",
+            center = room_centers[active_room_index]
+        ); */
+        for enemy in map_enemies[active_room_index].iter_mut() {
+            /*             if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
                 continue;
-            }
+            } */
+            //println!("Enemy position is: {pos:?}", pos = enemy.get_position());
             enemy.draw(&mut window, texture_storage.get(enemy.get_identifier()))
         }
         window.display();
@@ -177,7 +193,7 @@ fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: V
         return false;
     }
     if position.y < upper_left_corner_coordinates.y
-        || position.x > upper_left_corner_coordinates.y + VIEW_SIZE.y
+        || position.y > upper_left_corner_coordinates.y + VIEW_SIZE.y
     {
         return false;
     }
