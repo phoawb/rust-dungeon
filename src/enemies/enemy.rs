@@ -33,6 +33,7 @@ pub trait Enemy {
 }
 
 //TODO: allow seed as input argument
+//TODO: Add offset for enemy spawn position
 pub fn spawn_enemies(room_centers: Vec<Vector2f>) -> Vec<Vec<Box<dyn Enemy>>> {
     let mut map_enemies: Vec<Vec<Box<dyn Enemy>>> = Vec::new();
     let mut rng = thread_rng();
