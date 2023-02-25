@@ -42,7 +42,8 @@ pub fn spawn_enemies(room_centers: Vec<Vector2f>) -> Vec<Vec<Box<dyn Enemy>>> {
         let room_enemies: Vec<Box<dyn Enemy>> = Vec::new();
         map_enemies.push(room_enemies);
         let enemy_amount = rng.gen_range(3..=5);
-        for _j in 0..=enemy_amount {
+        println!("Enemy amount is: {enemy_amount}");
+        for _j in 0..enemy_amount {
             let enemy_index = rng.gen_range(0..=enemy_type_count);
             let enemy_type = EnemyType::from_repr(enemy_index).unwrap_or(EnemyType::Demon);
             let enemy: Box<dyn Enemy> = match enemy_type {
