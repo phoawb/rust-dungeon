@@ -78,12 +78,6 @@ fn main() {
     //let necromancer: Necromancer = Necromancer::new(position);
     //let mut enemies: Vec<Box<dyn Enemy>> = vec![Box::new(demon), Box::new(necromancer)];
     let mut map_enemies = spawn_enemies(map.get_room_centers());
-    for room_enemies in &map_enemies {
-        println!(
-            "The position of room enemies are: {pos:?}",
-            pos = room_enemies[0].get_position()
-        );
-    }
     loop {
         // events
         while let Some(ev) = window.poll_event() {
