@@ -74,9 +74,6 @@ fn main() {
     let mut player_projectiles: Vec<Projectile> = Vec::new();
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
-    //let demon: Demon = Demon::new(position);
-    //let necromancer: Necromancer = Necromancer::new(position);
-    //let mut enemies: Vec<Box<dyn Enemy>> = vec![Box::new(demon), Box::new(necromancer)];
     let mut map_enemies = spawn_enemies(map.get_room_centers());
     loop {
         // events
@@ -165,15 +162,10 @@ fn main() {
         }
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
 
-        /*         println!(
-            "Active room center is: {center:?}",
-            center = room_centers[active_room_index]
-        ); */
         for enemy in map_enemies[active_room_index].iter_mut() {
             /*             if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
                 continue;
             } */
-            //println!("Enemy position is: {pos:?}", pos = enemy.get_position());
             enemy.draw(&mut window, texture_storage.get(enemy.get_identifier()))
         }
         window.display();
