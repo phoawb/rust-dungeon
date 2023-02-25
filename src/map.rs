@@ -304,4 +304,12 @@ impl Map {
         }
         room_centers
     }
+
+    //TODO: handle unwrap
+    pub fn get_active_room_index(&self) -> usize {
+        self.taken_positions
+            .iter()
+            .position(|&p| p == self.active_room)
+            .unwrap()
+    }
 }
