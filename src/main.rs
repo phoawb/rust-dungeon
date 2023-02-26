@@ -211,8 +211,6 @@ fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: V
 
 /* TODO COLLISIONS
  * Hadle collisions globally instead of in the rooms
- * Handle player & Wall collisions with coordinate bounds
- * Handle Enemy & -||-
  * Handle player & enemy collisions
  * Handle player & enemy projectile collisions
  * Handle enemy & player projectile collissions
