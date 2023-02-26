@@ -18,6 +18,7 @@ use map::Map;
 mod collision_manager;
 use collision_manager::player_collision_w_walls;
 use rust_dungeon::VIEW_SIZE;
+mod collider;
 mod enemies;
 mod projectile;
 
