@@ -1,4 +1,4 @@
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 use sfml::{
     graphics::{RenderWindow, Texture},
     system::Vector2f,
