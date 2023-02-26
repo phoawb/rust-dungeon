@@ -133,6 +133,7 @@ fn main() {
         main_view.set_center(new_center);
         // update non-player entities
         let player_position = player.get_position();
+
         for enemy in map_enemies[active_room_index].iter_mut() {
             if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
                 continue;
