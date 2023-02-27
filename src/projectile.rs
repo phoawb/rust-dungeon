@@ -7,16 +7,16 @@ use sfml::{
     SfBox,
 };
 
-use crate::{animation::Animation, texture_storage::TextureIdentifiers};
+use crate::{animation::Animation, collider::Collider, texture_storage::TextureIdentifiers};
 
 #[derive(Debug)]
 pub struct Projectile {
-    position: Vector2f,
     size: Vector2f,
     direction: Vector2f,
     origin: Vector2f,
     animation: Animation,
     speed: f32,
+    collider: Collider,
 }
 
 impl Projectile {
@@ -26,28 +26,29 @@ impl Projectile {
         let switch_time = 0.2;
         let speed = 5.0;
         Projectile {
-            position,
             size,
             direction,
             origin,
             animation: Animation::from(TextureIdentifiers::Projectile, image_count, switch_time),
             speed,
+            collider: Collider::new(size, position),
         }
     }
     pub fn update(&mut self) {
-        self.position += self.direction * self.speed;
+        self.collider
+            .set_position(self.get_position() + self.direction * self.speed);
         let row = 0;
         let face_right = true;
         self.animation.update(row, face_right)
     }
 
     pub fn get_position(&self) -> Vector2f {
-        self.position
+        self.collider.get_position()
     }
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
-            self.position,
+            self.collider.get_position(),
             self.origin,
             self.animation.get_uv_rect(),
         );
