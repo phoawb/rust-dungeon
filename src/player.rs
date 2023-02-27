@@ -1,3 +1,4 @@
+use crate::collider::Collider;
 use crate::texture_storage::TextureIdentifiers;
 use crate::{animation::Animation, projectile::Projectile};
 use rust_dungeon::Body;
@@ -19,6 +20,7 @@ pub struct Player {
     speed: f32,
     //facing direction top, right, bottom, left
     direction: [bool; 4],
+    collider: Collider,
 }
 
 impl Player {
@@ -46,6 +48,7 @@ impl Player {
             animation: Animation::from(TextureIdentifiers::Player, image_count, 0.2),
             speed: 10.0, //TODO: CHANGE THE SPEED TO 5 IN PRODUCTION
             direction: [false, false, true, false],
+            collider: Collider::new(size, position),
         }
     }
 
@@ -148,11 +151,11 @@ impl Player {
     }
 
     pub fn get_position(&self) -> Vector2f {
-        self.position
+        self.collider.get_position()
     }
 
     pub fn set_position(&mut self, position: Vector2f) {
-        self.position = position;
+        self.collider.set_position(position);
     }
 
     pub fn shoot(&self, mouse_coords: Vector2f) -> Projectile {
@@ -167,7 +170,7 @@ impl Player {
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
-            self.position,
+            self.collider.get_position(),
             self.origin,
             self.animation.get_uv_rect(),
         );
