@@ -12,7 +12,6 @@ use sfml::window::Key;
 
 #[derive(Debug)]
 pub struct Player {
-    position: Vector2f,
     size: Vector2f,
     origin: Vector2f,
     row: i32,
@@ -41,7 +40,6 @@ impl Player {
         let size = Vector2f { x: 70.0, y: 70.0 };
         let image_count = Vector2i { x: 4, y: 10 };
         Player {
-            position,
             size,
             origin: size / 2.0,
             row: 0,
