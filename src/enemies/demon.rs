@@ -5,14 +5,13 @@ use sfml::{
     SfBox,
 };
 
-use crate::{animation::Animation, texture_storage::TextureIdentifiers};
+use crate::{animation::Animation, collider::Collider, texture_storage::TextureIdentifiers};
 
 use super::enemy::Enemy;
 
 pub struct Demon {
     hp: i32,
     //damage: i32,
-    position: Vector2f,
     size: Vector2f,
     origin: Vector2f,
     row: i32,
@@ -20,7 +19,7 @@ pub struct Demon {
     speed: f32,
     face_right: bool,
     texture_identifier: TextureIdentifiers,
-    //points: i32,
+    collider: Collider, //points: i32,
 }
 
 impl Default for Demon {
@@ -32,8 +31,7 @@ impl Default for Demon {
         let switch_time = 0.2;
         Demon {
             hp: 60,
-            position: Vector2f::new(0.0, 0.0),
-            size: Vector2f::new(32.0, 36.0),
+            size,
             origin,
             row: 0,
             animation: Animation::from(
@@ -44,22 +42,22 @@ impl Default for Demon {
             speed: 2.0,
             face_right: false,
             texture_identifier,
+            collider: Collider::new(size, Vector2f::new(0.0, 0.0)),
         }
     }
 }
 
 impl Enemy for Demon {
     fn new(position: Vector2f) -> Demon {
-        Demon {
-            position,
-            ..Default::default()
-        }
+        let mut demon = Demon::default();
+        demon.set_position(position);
+        demon
     }
 
     //The demon chases the player in order to hurt them
     fn update(&mut self, player_position: Vector2f) {
-        let x_dif: f32 = player_position.x - self.position.x;
-        let y_dif: f32 = player_position.y - self.position.y;
+        let x_dif: f32 = player_position.x - self.collider.get_position().x;
+        let y_dif: f32 = player_position.y - self.collider.get_position().y;
         let mut movement = Vector2f { x: x_dif, y: y_dif };
         self.face_right = x_dif >= 0.0;
         self.animation.update(self.row, self.face_right);
@@ -69,7 +67,7 @@ impl Enemy for Demon {
         movement.x /= (x_dif * x_dif + y_dif * y_dif).sqrt();
         movement.y /= (x_dif * x_dif + y_dif * y_dif).sqrt();
         movement *= self.speed;
-        self.position += movement;
+        self.collider.set_position(self.get_position() + movement);
     }
 
     fn get_identifier(&self) -> TextureIdentifiers {
@@ -77,17 +75,17 @@ impl Enemy for Demon {
     }
 
     fn set_position(&mut self, position: Vector2f) {
-        self.position = position;
+        self.collider.set_position(position);
     }
 
     fn get_position(&self) -> Vector2f {
-        self.position
+        self.collider.get_position()
     }
 
     fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
-            self.position,
+            self.collider.get_position(),
             self.origin,
             self.animation.get_uv_rect(),
         );
