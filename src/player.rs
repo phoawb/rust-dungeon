@@ -147,7 +147,7 @@ impl Player {
         }
         self.animation.update(self.row, self.direction[1]);
 
-        self.position += movement;
+        self.set_position(self.get_position() + movement);
     }
 
     pub fn get_position(&self) -> Vector2f {
@@ -159,12 +159,12 @@ impl Player {
     }
 
     pub fn shoot(&self, mouse_coords: Vector2f) -> Projectile {
-        let direction = mouse_coords - self.position;
+        let direction = mouse_coords - self.get_position();
         let normalized_direction =
             direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
         //TODO: PUT THIS AS A VAR IN LIB
         let projectile_size = Vector2f::new(64.0, 64.0);
-        Projectile::new(self.position, projectile_size, normalized_direction)
+        Projectile::new(self.get_position(), projectile_size, normalized_direction)
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
