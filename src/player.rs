@@ -174,7 +174,12 @@ impl Player {
         );
         body.set_scale(Vector2f { x: 1.1, y: 1.1 });
         body.set_texture(texture, false);
+        body.set_outline_color(Color::CYAN);
         window.draw(&body);
+    }
+
+    pub fn get_collider(&mut self) -> &mut Collider {
+        &mut self.collider
     }
 }
 

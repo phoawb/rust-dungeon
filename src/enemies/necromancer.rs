@@ -88,6 +88,10 @@ impl Enemy for Necromancer {
         self.collider.get_position()
     }
 
+    fn get_collider(&mut self) -> &mut Collider {
+        &mut self.collider
+    }
+
     fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,

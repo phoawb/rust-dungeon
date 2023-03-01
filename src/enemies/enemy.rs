@@ -7,7 +7,7 @@ use sfml::{
 use strum::EnumCount;
 use strum_macros::{EnumCount, EnumIter, FromRepr};
 
-use crate::texture_storage::TextureIdentifiers;
+use crate::{collider::Collider, texture_storage::TextureIdentifiers};
 
 use super::{demon::Demon, necromancer::Necromancer};
 
@@ -28,6 +28,7 @@ pub trait Enemy {
 
     fn set_position(&mut self, position: Vector2f);
     fn get_position(&self) -> Vector2f;
+    fn get_collider(&mut self) -> &mut Collider;
 
     fn draw(&mut self, window: &mut RenderWindow, texture: &SfBox<Texture>);
 }
