@@ -17,8 +17,10 @@ pub struct Projectile {
     animation: Animation,
     speed: f32,
     collider: Collider,
+    collided: bool,
 }
 
+//TODO: implement default for projectile
 impl Projectile {
     pub fn new(position: Vector2f, size: Vector2f, direction: Vector2f) -> Projectile {
         let origin = size / 2.0;
@@ -32,6 +34,7 @@ impl Projectile {
             animation: Animation::from(TextureIdentifiers::Projectile, image_count, switch_time),
             speed,
             collider: Collider::new(size, position),
+            collided: false,
         }
     }
     pub fn update(&mut self) {
