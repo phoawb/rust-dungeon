@@ -53,6 +53,14 @@ impl Projectile {
         &mut self.collider
     }
 
+    pub fn set_collided(&mut self, collided: bool) {
+        self.collided = collided;
+    }
+
+    pub fn has_collided(&self) -> bool {
+        self.collided
+    }
+
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
