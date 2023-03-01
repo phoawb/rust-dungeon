@@ -48,6 +48,11 @@ impl Projectile {
     pub fn get_position(&self) -> Vector2f {
         self.collider.get_position()
     }
+
+    pub fn get_collider(&mut self) -> &mut Collider {
+        &mut self.collider
+    }
+
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
         let mut body = self.create_body(
             self.size,
