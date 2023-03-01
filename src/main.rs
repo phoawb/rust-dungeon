@@ -113,7 +113,14 @@ fn main() {
             active_room.x as f32 * VIEW_SIZE.x,
             active_room.y as f32 * VIEW_SIZE.y,
         );
+        let mut active_room_index = map.get_active_room_index();
         player.update();
+        for enemy in map_enemies[active_room_index].iter_mut() {
+            let player_collider = player.get_collider();
+            let enemy_collider = enemy.get_collider();
+            let push = 1.0;
+            player_collider.check_collision(enemy_collider, push);
+        }
         player.set_position(player_collision_w_walls(
             player.get_position(),
             upper_left_corner_coordinates,
@@ -126,7 +133,7 @@ fn main() {
             active_room.x as f32 * VIEW_SIZE.x,
             active_room.y as f32 * VIEW_SIZE.y,
         );
-        let active_room_index = map.get_active_room_index();
+        active_room_index = map.get_active_room_index();
         let new_center = Vector2f::new(
             active_room.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,
             active_room.y as f32 * VIEW_SIZE.y + VIEW_SIZE.y / 2.0,
@@ -134,11 +141,7 @@ fn main() {
         main_view.set_center(new_center);
         // update non-player entities
         let player_position = player.get_position();
-
         for enemy in map_enemies[active_room_index].iter_mut() {
-            if !is_entity_in_active_room(enemy.get_position(), upper_left_corner_coordinates) {
-                continue;
-            }
             enemy.update(player_position);
             enemy.set_position(collision_w_walls(
                 enemy.get_position(),
