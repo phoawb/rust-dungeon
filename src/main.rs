@@ -120,7 +120,15 @@ fn main() {
             let enemy_collider = enemy.get_collider();
             let push = 1.0;
             player_collider.check_collision(enemy_collider, push);
+            for projectile in player_projectiles.iter_mut() {
+                let projectile_collider = projectile.get_collider();
+                if projectile_collider.check_collision(enemy_collider, push) {
+                    projectile.set_collided(true);
+                }
+            }
         }
+
+        player_projectiles.retain(|p| !p.has_collided());
         player.set_position(player_collision_w_walls(
             player.get_position(),
             upper_left_corner_coordinates,
