@@ -18,6 +18,7 @@ pub struct Projectile {
     speed: f32,
     collider: Collider,
     collided: bool,
+    damage: i32,
 }
 
 //TODO: implement default for projectile
@@ -35,6 +36,7 @@ impl Projectile {
             speed,
             collider: Collider::new(size, position),
             collided: false,
+            damage: 20,
         }
     }
     pub fn update(&mut self) {
@@ -59,6 +61,10 @@ impl Projectile {
 
     pub fn has_collided(&self) -> bool {
         self.collided
+    }
+
+    pub fn get_damage(&self) -> i32 {
+        self.damage
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
