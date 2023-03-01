@@ -128,6 +128,13 @@ fn main() {
             }
         }
 
+        for projectile in player_projectiles.iter_mut() {
+            projectile.set_collided(projectile_collision_w_walls(
+                projectile.get_position(),
+                upper_left_corner_coordinates,
+            ))
+        }
+
         player_projectiles.retain(|p| !p.has_collided());
         player.set_position(player_collision_w_walls(
             player.get_position(),
@@ -159,16 +166,9 @@ fn main() {
 
         // draw everything
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
-        for i in (0..player_projectiles.len()).rev() {
-            player_projectiles[i].update();
-            if projectile_collision_w_walls(
-                player_projectiles[i].get_position(),
-                upper_left_corner_coordinates,
-            ) {
-                player_projectiles.remove(i);
-                continue;
-            }
-            player_projectiles[i].draw(
+        for projectile in player_projectiles.iter_mut() {
+            projectile.update();
+            projectile.draw(
                 &mut window,
                 texture_storage.get(TextureIdentifiers::Projectile),
             )
