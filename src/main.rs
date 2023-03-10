@@ -216,20 +216,6 @@ fn main() {
     }
 }
 
-fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: Vector2f) -> bool {
-    if position.x < upper_left_corner_coordinates.x
-        || position.x > upper_left_corner_coordinates.x + VIEW_SIZE.x
-    {
-        return false;
-    }
-    if position.y < upper_left_corner_coordinates.y
-        || position.y > upper_left_corner_coordinates.y + VIEW_SIZE.y
-    {
-        return false;
-    }
-    true
-}
-
 // TODO NEXT:
 
 /* TODO For collision:
