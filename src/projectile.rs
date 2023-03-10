@@ -34,7 +34,7 @@ impl Projectile {
             origin,
             animation: Animation::from(TextureIdentifiers::Projectile, image_count, switch_time),
             speed,
-            collider: Collider::new(size, position),
+            collider: Collider::new(size, position, None),
             collided: false,
             damage: 20,
         }

@@ -10,6 +10,7 @@ mod animation;
 mod player;
 use player::Player;
 mod map;
+use crate::collider::Collider;
 use crate::collision_manager::collision_w_walls;
 use crate::collision_manager::projectile_collision_w_walls;
 use crate::enemies::enemy::spawn_enemies;
@@ -76,6 +77,20 @@ fn main() {
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
     let mut map_enemies = spawn_enemies(map.get_room_centers());
+    let mut map_enemy_colliders: Vec<Vec<Collider>> = Vec::new();
+
+    for i in 0..map_enemies.len() {
+        map_enemy_colliders.push(Vec::new());
+        for j in 0..map_enemies[i].len() {
+            let enemy_collider = Collider::new(
+                map_enemies[i][j].get_size(),
+                map_enemies[i][j].get_position(),
+                Some(map_enemies[i][j].get_hp()),
+            );
+            map_enemy_colliders[i].push(enemy_collider);
+        }
+    }
+
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -115,18 +130,6 @@ fn main() {
         );
         let mut active_room_index = map.get_active_room_index();
         player.update();
-        for enemy in map_enemies[active_room_index].iter_mut() {
-            let player_collider = player.get_collider();
-            let enemy_collider = enemy.get_collider();
-            let push = 1.0;
-            player_collider.check_collision(enemy_collider, push);
-            for projectile in player_projectiles.iter_mut() {
-                let projectile_collider = projectile.get_collider();
-                if projectile_collider.check_collision(enemy_collider, push) {
-                    projectile.set_collided(true);
-                }
-            }
-        }
 
         for projectile in player_projectiles.iter_mut() {
             projectile.set_collided(projectile_collision_w_walls(
@@ -134,6 +137,31 @@ fn main() {
                 upper_left_corner_coordinates,
             ))
         }
+
+        for i in 0..map_enemies[active_room_index].len() {
+            let player_collider = player.get_collider();
+            let push: f32 = 1.0;
+            player_collider.check_collision(&mut map_enemy_colliders[active_room_index][i], 0.4);
+            map_enemies[active_room_index][i]
+                .set_position(map_enemy_colliders[active_room_index][i].get_position());
+            for projectile in player_projectiles.iter_mut() {
+                let projectile_collider = projectile.get_collider();
+                if !projectile_collider
+                    .check_collision(&mut map_enemy_colliders[active_room_index][i], push)
+                {
+                    continue;
+                }
+                projectile.set_collided(true);
+                map_enemies[active_room_index][i]
+                    .set_position(map_enemy_colliders[active_room_index][i].get_position());
+                let projectile_damage = projectile.get_damage();
+                map_enemies[active_room_index][i].take_damage(projectile_damage);
+                map_enemy_colliders[active_room_index][i].take_damage(projectile_damage);
+            }
+        }
+
+        map_enemies[active_room_index].retain(|e| e.get_hp() > 0);
+        map_enemy_colliders[active_room_index].retain(|c| c.get_hp() > 0);
 
         player_projectiles.retain(|p| !p.has_collided());
         player.set_position(player_collision_w_walls(
@@ -156,12 +184,15 @@ fn main() {
         main_view.set_center(new_center);
         // update non-player entities
         let player_position = player.get_position();
-        for enemy in map_enemies[active_room_index].iter_mut() {
-            enemy.update(player_position);
-            enemy.set_position(collision_w_walls(
-                enemy.get_position(),
+
+        for i in 0..map_enemies[active_room_index].len() {
+            map_enemies[active_room_index][i].update(player_position);
+            let enemy_position = map_enemies[active_room_index][i].get_position();
+            map_enemies[active_room_index][i].set_position(collision_w_walls(
+                enemy_position,
                 upper_left_corner_coordinates,
-            ))
+            ));
+            map_enemy_colliders[active_room_index][i].set_position(enemy_position);
         }
 
         // draw everything

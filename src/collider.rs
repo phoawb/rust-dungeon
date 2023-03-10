@@ -1,16 +1,19 @@
-use std::os::unix::process;
-
 use sfml::system::Vector2f;
 
 #[derive(Debug)]
 pub struct Collider {
     size: Vector2f,
     position: Vector2f,
+    hp: i32,
 }
 
 impl Collider {
-    pub fn new(size: Vector2f, position: Vector2f) -> Self {
-        Collider { size, position }
+    pub fn new(size: Vector2f, position: Vector2f, hp: Option<i32>) -> Self {
+        Collider {
+            size,
+            position,
+            hp: hp.unwrap_or(0),
+        }
     }
 
     pub fn check_collision(&mut self, other: &mut Collider, mut push: f32) -> bool {
@@ -67,6 +70,14 @@ impl Collider {
 
     fn get_half_size(&self) -> Vector2f {
         self.size / 2.0
+    }
+
+    pub fn take_damage(&mut self, damage: i32) {
+        self.hp -= damage;
+    }
+
+    pub fn get_hp(&self) -> i32 {
+        self.hp
     }
 
     fn update(&mut self, delta_x: f32, delta_y: f32) {

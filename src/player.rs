@@ -46,7 +46,7 @@ impl Player {
             animation: Animation::from(TextureIdentifiers::Player, image_count, 0.2),
             speed: 10.0, //TODO: CHANGE THE SPEED TO 5 IN PRODUCTION
             direction: [false, false, true, false],
-            collider: Collider::new(size, position),
+            collider: Collider::new(size, position, None),
         }
     }
 
