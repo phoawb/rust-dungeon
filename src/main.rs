@@ -238,12 +238,6 @@ fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: V
 * All enemy bullets live in 1 vector
 */
 
-/* TODO  ENEMIES:
-* Initialise a vector of enemy vectors with generics
-* each enemy type is defined in its own file
-* Only draw the enemies with the same index as the number of active rooms
- */
-
 /* TODO MAP & ROOMS
 * Implement minimap
  * when press E toggle view size
@@ -253,8 +247,5 @@ fn is_entity_in_active_room(position: Vector2f, upper_left_corner_coordinates: V
  */
 
 /* TODO COLLISIONS
- * Hadle collisions globally instead of in the rooms
- * Handle player & enemy collisions
  * Handle player & enemy projectile collisions
- * Handle enemy & player projectile collissions
  */
