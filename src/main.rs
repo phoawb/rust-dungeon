@@ -65,7 +65,8 @@ fn main() {
     );
 
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
-    map.start(None);
+    let input_seed: u64 = 14348464890032967579;
+    map.start(Some(input_seed));
     let spawn = map.get_spawn();
     let position: Vector2<f32> = Vector2 {
         x: spawn.x as f32 * VIEW_SIZE.x + VIEW_SIZE.x / 2.0,

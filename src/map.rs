@@ -1,5 +1,5 @@
 use crate::room::Room;
-use rand::Rng;
+use rand::{random, Rng};
 use rand::{rngs::StdRng, SeedableRng};
 use rust_dungeon::{get_room_colors, CardinalDirection, Doors, RoomColor, VIEW_SIZE};
 use sfml::system::Vector2f;
@@ -167,8 +167,7 @@ impl Map {
     }
 
     pub fn start(&mut self, input_seed: Option<u64>) {
-        //let seed: u64 = input_seed.unwrap_or(random());
-        let seed: u64 = 14348464890032967579;
+        let seed: u64 = input_seed.unwrap_or(random());
         let probability = 0.55;
         let mut rng = StdRng::seed_from_u64(seed);
         let random_x_coord: usize = rng.gen_range(0..self.grid_size.x);
