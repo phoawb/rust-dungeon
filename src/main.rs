@@ -228,9 +228,7 @@ fn main() {
 /* TODO MAP & ROOMS
 * Implement minimap
  * when press E toggle view size
- * stop updating shit
  * display score
- * implement spawning per room
  */
 
 /* TODO COLLISIONS
