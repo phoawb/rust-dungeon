@@ -107,15 +107,10 @@ fn main() {
                     resize_view(&window, &mut main_view);
                     println!("Resize event activated!")
                 }
-                Event::MouseButtonPressed { button, x, y } => {
+                Event::MouseButtonPressed { button: _, x, y } => {
                     //player.shoot();
                     let mouse_coords = window.map_pixel_to_coords(Vector2i { x, y }, &main_view);
                     player_projectiles.push(player.shoot(mouse_coords));
-                    println!("{button:?}");
-                    println!("x: {x}, y: {y}");
-                    println!("moouse coords are: {mouse_coords:?}");
-                    println!("player position is: {:?}", player.get_position());
-                    println!("Mouse button was pressed!")
                 }
                 _ => {}
             }

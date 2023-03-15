@@ -22,10 +22,7 @@ impl Collider {
         let self_position: Vector2f = self.get_position();
         let self_half_size: Vector2f = self.get_half_size();
 
-        println!("player pos is: {self_position:?}");
-        println!("other pos is: {other_position:?}");
         let delta = other_position - self_position;
-        println!("Delta is: {delta:?}");
         let intersect = Vector2f::new(
             delta.x.abs() - (other_half_size.x + self_half_size.x),
             delta.y.abs() - (other_half_size.y + self_half_size.y),
@@ -40,20 +37,16 @@ impl Collider {
                 if delta.x > 0.0 {
                     self.update(intersect.x * (1.0 - push), 0.0);
                     other.update(-intersect.x * push, 0.0);
-                    println!("x > 0: other pos = {other_position:?}");
                 } else {
                     self.update(-intersect.x * (1.0 - push), 0.0);
                     other.update(intersect.x * push, 0.0);
-                    println!("else x > 0: other pos = {other_position:?}");
                 }
             } else if delta.y > 0.0 {
                 self.update(0.0, intersect.y * (1.0 - push));
                 other.update(0.0, -intersect.y * push);
-                println!("y > 0: other pos = {other_position:?}");
             } else {
                 self.update(0.0, -intersect.y * (1.0 - push));
                 other.update(0.0, intersect.y * push);
-                println!("else y > 0: other pos = {other_position:?}");
             }
             return true;
         }

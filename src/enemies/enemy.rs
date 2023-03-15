@@ -53,7 +53,6 @@ pub fn spawn_enemies(room_centers: Vec<Vector2f>) -> Vec<Vec<Box<dyn Enemy>>> {
                     spawn_offset.y * rng.gen_range(-1.0..1.0),
                 );
             let enemy_index = rng.gen_range(0..enemy_type_count);
-            println!("enemy index is: {enemy_index}");
             let enemy_type = EnemyType::from_repr(enemy_index).unwrap_or(EnemyType::Demon);
             let enemy: Box<dyn Enemy> = match enemy_type {
                 EnemyType::Demon => Box::new(Demon::new(spawn)),
