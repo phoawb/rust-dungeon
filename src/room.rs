@@ -12,6 +12,7 @@ pub struct Room {
     doors: Doors,
     color: RoomColor,
     spawn_position: Vector2f,
+    visited: bool,
 }
 
 fn get_image_count(i: i32, j: i32) -> Vector2i {
@@ -40,6 +41,7 @@ impl Room {
             },
             color: RoomColor::Brown,
             spawn_position: Vector2f { x: 0.0, y: 0.0 },
+            visited: false,
         };
         for _i in 0..24 {
             room.tiles.push(Vec::new());
@@ -141,5 +143,13 @@ impl Room {
 
     pub fn get_spawn_position(&self) -> Vector2f {
         self.spawn_position
+    }
+
+    pub fn is_visited(&self) -> bool {
+        self.visited
+    }
+
+    pub fn set_visited(&mut self, visited: bool) {
+        self.visited = visited;
     }
 }
