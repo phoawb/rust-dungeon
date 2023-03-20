@@ -233,6 +233,15 @@ impl Map {
         }
     }
 
+    pub fn draw_visited_rooms(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {
+        for coordinates in &self.taken_positions {
+            if !self.rooms[coordinates.x][coordinates.y].is_visited() {
+                continue;
+            }
+            self.rooms[coordinates.x][coordinates.y].draw(window, texture);
+        }
+    }
+
     fn get_neighbouring_room_indexes(&self, coordinate: Vector2<usize>) -> Vec<usize> {
         let mut neighbouring_room_indexes: Vec<usize> = Vec::new();
         for direction in CardinalDirection::iter() {
