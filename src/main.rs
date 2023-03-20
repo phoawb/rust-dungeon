@@ -92,6 +92,9 @@ fn main() {
         }
     }
 
+    let mut minimap = false;
+    let mut time = Clock::start();
+
     loop {
         // events
         while let Some(ev) = window.poll_event() {
@@ -114,6 +117,23 @@ fn main() {
                 }
                 _ => {}
             }
+        }
+
+        if Key::E.is_pressed() && time.elapsed_time().as_seconds() > 0.2 {
+            minimap = toggle_minimap(minimap);
+            time.restart();
+        }
+
+        if minimap {
+            main_view.set_size(VIEW_SIZE * 9.0);
+            window.set_view(&main_view);
+            window.clear(Color::BLACK);
+            map.draw_visited_rooms(&mut window, texture_storage.get(TextureIdentifiers::Tile));
+            player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
+            window.display();
+            continue;
+        } else {
+            main_view.set_size(VIEW_SIZE);
         }
 
         let mut active_room = map.get_active_room();
@@ -210,6 +230,13 @@ fn main() {
         }
         window.display();
     }
+}
+
+fn toggle_minimap(minimap: bool) -> bool {
+    if minimap {
+        return false;
+    }
+    true
 }
 
 // TODO NEXT:
