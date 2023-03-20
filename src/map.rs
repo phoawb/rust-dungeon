@@ -292,6 +292,7 @@ impl Map {
                 continue;
             }
             self.active_room = neighbouring_room_coordinates;
+            self.rooms[self.active_room.x][self.active_room.y].set_visited(true);
         }
     }
     pub fn get_room_centers(&self) -> Vec<Vector2f> {
