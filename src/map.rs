@@ -185,6 +185,7 @@ impl Map {
         self.set_room_colors(colors);
         self.spawn = self.get_farthest_coordinate(starting_coordinates);
         self.active_room = self.spawn;
+        self.rooms[self.active_room.x][self.active_room.y].set_visited(true);
         self.rooms[self.spawn.x][self.spawn.y].set_color(RoomColor::Red);
         self.end = self.get_farthest_coordinate(self.spawn);
         self.rooms[self.end.x][self.end.y].set_color(RoomColor::Red);
