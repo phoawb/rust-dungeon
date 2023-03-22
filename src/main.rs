@@ -241,6 +241,23 @@ fn toggle_minimap(minimap: bool) -> bool {
 
 // TODO NEXT:
 
+/* TODO for MVP
+* have enemies be able to shoot
+* player is able to take damage
+* player is able to dash
+* player has invis for 1 second after entering a new room
+* sound (?)
+*/
+
+// TODO: The dreaded main menu
+/*
+* state machine in rust :(((((
+ * main menu state
+ * game state
+ * win state
+ * lose state
+ */
+
 /* TODO For collision:
 * Create a vector of enemy bullets & player bullets that live in main
 * The player & enemy update function take that vector as an input argument
@@ -248,8 +265,6 @@ fn toggle_minimap(minimap: bool) -> bool {
 */
 
 /* TODO MAP & ROOMS
-* Implement minimap
- * when press E toggle view size
  * display score
  */
 
