@@ -1,7 +1,7 @@
 use crate::collider::Collider;
 use crate::texture_storage::TextureIdentifiers;
 use crate::{animation::Animation, projectile::Projectile};
-use rust_dungeon::Body;
+use rust_dungeon::{Body, PLAYER_PROJECTILE_IMAGE_COUNT};
 use sfml::{
     graphics::*,
     system::{Vector2f, Vector2i},
@@ -162,7 +162,12 @@ impl Player {
             direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
         //TODO: PUT THIS AS A VAR IN LIB
         let projectile_size = Vector2f::new(64.0, 64.0);
-        Projectile::new(self.get_position(), projectile_size, normalized_direction)
+        Projectile::new(
+            self.get_position(),
+            projectile_size,
+            normalized_direction,
+            PLAYER_PROJECTILE_IMAGE_COUNT,
+        )
     }
 
     pub fn draw(&self, window: &mut RenderWindow, texture: &SfBox<Texture>) {

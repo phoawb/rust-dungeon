@@ -23,9 +23,13 @@ pub struct Projectile {
 
 //TODO: implement default for projectile
 impl Projectile {
-    pub fn new(position: Vector2f, size: Vector2f, direction: Vector2f) -> Projectile {
+    pub fn new(
+        position: Vector2f,
+        size: Vector2f,
+        direction: Vector2f,
+        image_count: Vector2i,
+    ) -> Projectile {
         let origin = size / 2.0;
-        let image_count = Vector2i::new(17, 1);
         let switch_time = 0.2;
         let speed = 5.0;
         Projectile {
