@@ -7,7 +7,7 @@ use sfml::{
 use strum::EnumCount;
 use strum_macros::{EnumCount, EnumIter, FromRepr};
 
-use crate::texture_storage::TextureIdentifiers;
+use crate::{projectile::Projectile, texture_storage::TextureIdentifiers};
 
 use super::{demon::Demon, necromancer::Necromancer};
 
@@ -23,9 +23,9 @@ pub trait Enemy {
         Self: Sized;
 
     fn update(&mut self, player_position: Vector2f);
+    fn can_shoot(&self) -> bool;
 
     fn get_identifier(&self) -> TextureIdentifiers;
-
     fn set_position(&mut self, position: Vector2f);
     fn get_position(&self) -> Vector2f;
     fn take_damage(&mut self, damage: i32);
@@ -62,4 +62,12 @@ pub fn spawn_enemies(room_centers: Vec<Vector2f>) -> Vec<Vec<Box<dyn Enemy>>> {
         }
     }
     map_enemies
+}
+
+pub fn shoot(enemy_position: Vector2f, player_position: Vector2f) -> Projectile {
+    let direction = player_position - enemy_position;
+    let normalized_direction = direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
+    //TODO: PUT THIS AS A VAR IN LIB
+    let projectile_size = Vector2f::new(64.0, 64.0);
+    Projectile::new(self.get_position(), projectile_size, normalized_direction)
 }

@@ -77,6 +77,10 @@ impl Enemy for Necromancer {
         self.position += movement;
     }
 
+    fn can_shoot(&self) -> bool {
+        true
+    }
+
     fn get_identifier(&self) -> TextureIdentifiers {
         self.texture_identifer
     }

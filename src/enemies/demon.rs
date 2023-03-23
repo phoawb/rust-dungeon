@@ -72,6 +72,10 @@ impl Enemy for Demon {
         self.position += movement;
     }
 
+    fn can_shoot(&self) -> bool {
+        false
+    }
+
     fn get_identifier(&self) -> TextureIdentifiers {
         self.texture_identifier
     }
