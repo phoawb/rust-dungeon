@@ -64,7 +64,7 @@ pub fn spawn_enemies(room_centers: Vec<Vector2f>) -> Vec<Vec<Box<dyn Enemy>>> {
     map_enemies
 }
 
-pub fn shoot(enemy_position: Vector2f, player_position: Vector2f) -> Projectile {
+pub fn enemy_shoot(enemy_position: Vector2f, player_position: Vector2f) -> Projectile {
     let direction = player_position - enemy_position;
     let normalized_direction = direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
     //TODO: PUT THIS AS A VAR IN LIB
