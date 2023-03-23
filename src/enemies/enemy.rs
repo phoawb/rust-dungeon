@@ -69,5 +69,5 @@ pub fn shoot(enemy_position: Vector2f, player_position: Vector2f) -> Projectile 
     let normalized_direction = direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
     //TODO: PUT THIS AS A VAR IN LIB
     let projectile_size = Vector2f::new(64.0, 64.0);
-    Projectile::new(self.get_position(), projectile_size, normalized_direction)
+    Projectile::new(enemy_position, projectile_size, normalized_direction)
 }
