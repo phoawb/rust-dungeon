@@ -1,5 +1,5 @@
 use sfml::graphics::*;
-use sfml::system::{Vector2, Vector2f};
+use sfml::system::{Vector2, Vector2f, Vector2i};
 use strum_macros::{EnumCount, EnumIter, FromRepr};
 
 #[derive(Debug, EnumIter, Copy, Clone)]
@@ -131,6 +131,8 @@ pub trait Body {
 pub const VIEW_SIZE: Vector2<f32> = Vector2f { x: 768.0, y: 480.0 };
 //Pixel size of a tile
 pub const TILE_SIZE: Vector2f = Vector2f { x: 32.0, y: 32.0 };
+pub const PLAYER_PROJECTILE_IMAGE_COUNT: Vector2i = Vector2i { x: 17, y: 1 };
+pub const ENEMY_PROJECTILE_IMAGE_COUNT: Vector2i = Vector2i { x: 5, y: 1 };
 
 #[derive(Debug, Clone, Copy)]
 pub struct Doors {
