@@ -32,4 +32,5 @@ pub enum TextureIdentifiers {
     Demon,
     Necromancer,
     Projectile,
+    EnemyProjectile,
 }

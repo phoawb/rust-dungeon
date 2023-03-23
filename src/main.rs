@@ -63,6 +63,10 @@ fn main() {
         TextureIdentifiers::Projectile,
         "textures/water_projectile.png",
     );
+    texture_storage.load(
+        TextureIdentifiers::EnemyProjectile,
+        "textures/fire_projectile.png",
+    );
 
     let mut map = Map::from(Vector2 { x: 9, y: 9 });
     let input_seed: u64 = 14348464890032967579;
