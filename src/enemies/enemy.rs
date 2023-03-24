@@ -69,11 +69,12 @@ pub fn enemy_shoot(enemy_position: Vector2f, player_position: Vector2f) -> Proje
     let direction = player_position - enemy_position;
     let normalized_direction = direction / ((direction.x.powf(2.0) + direction.y.powf(2.0)).sqrt());
     //TODO: PUT THIS AS A VAR IN LIB
-    let projectile_size = Vector2f::new(64.0, 64.0);
+    let projectile_size = Vector2f::new(48.0, 48.0);
     Projectile::new(
         enemy_position,
         projectile_size,
         normalized_direction,
+        TextureIdentifiers::EnemyProjectile,
         ENEMY_PROJECTILE_IMAGE_COUNT,
     )
 }
