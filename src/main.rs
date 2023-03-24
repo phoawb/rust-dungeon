@@ -13,6 +13,7 @@ mod map;
 use crate::collider::Collider;
 use crate::collision_manager::collision_w_walls;
 use crate::collision_manager::projectile_collision_w_walls;
+use crate::enemies::enemy::enemy_shoot;
 use crate::enemies::enemy::spawn_enemies;
 use crate::projectile::Projectile;
 use map::Map;
@@ -79,6 +80,7 @@ fn main() {
 
     let mut player = Player::from(position);
     let mut player_projectiles: Vec<Projectile> = Vec::new();
+    let mut enemy_projectiles: Vec<Projectile> = Vec::new();
     main_view.set_size(VIEW_SIZE);
     main_view.set_center(player.get_position());
     let mut map_enemies = spawn_enemies(map.get_room_centers());
@@ -208,12 +210,25 @@ fn main() {
         for i in 0..map_enemies[active_room_index].len() {
             map_enemies[active_room_index][i].update(player_position);
             let enemy_position = map_enemies[active_room_index][i].get_position();
+            let delta_time = time.elapsed_time().as_seconds() % 2.0;
+            if map_enemies[active_room_index][i].can_shoot() && delta_time > 1.98 {
+                enemy_projectiles.push(enemy_shoot(enemy_position, player.get_position()));
+            }
             map_enemies[active_room_index][i].set_position(collision_w_walls(
                 enemy_position,
                 upper_left_corner_coordinates,
             ));
             map_enemy_colliders[active_room_index][i].set_position(enemy_position);
         }
+
+        for projectile in enemy_projectiles.iter_mut() {
+            projectile.set_collided(projectile_collision_w_walls(
+                projectile.get_position(),
+                upper_left_corner_coordinates,
+            ))
+        }
+
+        enemy_projectiles.retain(|p| !p.has_collided());
 
         // draw everything
         map.draw(&mut window, texture_storage.get(TextureIdentifiers::Tile));
@@ -224,6 +239,15 @@ fn main() {
                 texture_storage.get(TextureIdentifiers::Projectile),
             )
         }
+
+        for projectile in enemy_projectiles.iter_mut() {
+            projectile.update();
+            projectile.draw(
+                &mut window,
+                texture_storage.get(TextureIdentifiers::EnemyProjectile),
+            );
+        }
+
         player.draw(&mut window, texture_storage.get(TextureIdentifiers::Player));
 
         for enemy in map_enemies[active_room_index].iter_mut() {
@@ -275,3 +299,11 @@ fn toggle_minimap(minimap: bool) -> bool {
 /* TODO COLLISIONS
  * Handle player & enemy projectile collisions
  */
+
+// SO WHY TF DOESNT THE FIREBALLS WANT TO RENDER?????
+// LIKE THE WATERBALLS RENDER JUST FINE RIGHT????????
+//POTENTIAL PLACES TO CHECK:
+/*
+* does the texture load correctly?
+* Is there somewhere else in projectile that hard code for projectile...
+*/
