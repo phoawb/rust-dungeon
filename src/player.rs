@@ -166,6 +166,7 @@ impl Player {
             self.get_position(),
             projectile_size,
             normalized_direction,
+            TextureIdentifiers::Projectile,
             PLAYER_PROJECTILE_IMAGE_COUNT,
         )
     }
