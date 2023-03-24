@@ -270,7 +270,6 @@ fn toggle_minimap(minimap: bool) -> bool {
 // TODO NEXT:
 
 /* TODO for MVP
-* have enemies be able to shoot
 * player is able to take damage
 * player is able to dash
 * player has invis for 1 second after entering a new room
@@ -299,11 +298,3 @@ fn toggle_minimap(minimap: bool) -> bool {
 /* TODO COLLISIONS
  * Handle player & enemy projectile collisions
  */
-
-// SO WHY TF DOESNT THE FIREBALLS WANT TO RENDER?????
-// LIKE THE WATERBALLS RENDER JUST FINE RIGHT????????
-//POTENTIAL PLACES TO CHECK:
-/*
-* does the texture load correctly?
-* Is there somewhere else in projectile that hard code for projectile...
-*/
