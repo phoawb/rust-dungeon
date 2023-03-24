@@ -27,6 +27,7 @@ impl Projectile {
         position: Vector2f,
         size: Vector2f,
         direction: Vector2f,
+        texture_identifier: TextureIdentifiers,
         image_count: Vector2i,
     ) -> Projectile {
         let origin = size / 2.0;
@@ -36,7 +37,7 @@ impl Projectile {
             size,
             direction,
             origin,
-            animation: Animation::from(TextureIdentifiers::Projectile, image_count, switch_time),
+            animation: Animation::from(texture_identifier, image_count, switch_time),
             speed,
             collider: Collider::new(size, position, None),
             collided: false,
