@@ -12,6 +12,7 @@ use sfml::window::Key;
 
 #[derive(Debug)]
 pub struct Player {
+    hp: i32,
     size: Vector2f,
     origin: Vector2f,
     row: i32,
@@ -23,23 +24,12 @@ pub struct Player {
 }
 
 impl Player {
-    //Empty constructor
-    /*     pub fn new() -> Tile {
-        // Size of one tile always set
-        let size = Vector2f { x: 70.0, y: 70.0 };
-        Tile {
-            position: Vector2f { x: 0.0, y: 0.0 },
-            uv_rect: IntRect::new(0, 0, 16, 16),
-            size,
-            origin: size / 2.0,
-        }
-    } */
-
     // Constructor
     pub fn from(position: Vector2f) -> Player {
         let size = Vector2f { x: 70.0, y: 70.0 };
         let image_count = Vector2i { x: 4, y: 10 };
         Player {
+            hp: 1000,
             size,
             origin: size / 2.0,
             row: 0,
@@ -186,6 +176,10 @@ impl Player {
 
     pub fn get_collider(&mut self) -> &mut Collider {
         &mut self.collider
+    }
+
+    pub fn take_damage(&mut self, damage: i32) {
+        self.hp -= damage;
     }
 }
 
