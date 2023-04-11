@@ -228,6 +228,18 @@ fn main() {
             ))
         }
 
+        for projectile in enemy_projectiles.iter_mut() {
+            let player_collider = player.get_collider();
+            if !projectile
+                .get_collider()
+                .check_collision(player_collider, 0.0)
+            {
+                continue;
+            }
+            projectile.set_collided(true);
+            player.take_damage(projectile.get_damage());
+        }
+
         enemy_projectiles.retain(|p| !p.has_collided());
 
         // draw everything
